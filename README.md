@@ -1,1 +1,29 @@
 # Godot-LegendOfTheBrave
+
+这是根据b站教程[BV1SP411m7aj](https://www.bilibili.com/video/BV1SP411m7aj)@timothyqiu的Godot 4教程《勇者传说》做下来的一个项目，作为godot引擎入门
+
+ > 所有图像资源等我大概都不具备版权。因此本项目仅供娱乐
+
+---
+
+ ### 目前进度eps.13（滑铲）已完成
+
+ 闲来无事，在照着其制作的基础上，又凭借着兴趣搞了点自己想要的功能。目前已实现的有：
+
+  - **InputBuffer实现**。也即输入缓存。实现了对0.5秒内按键输入的记录，实现了对长短按以及特定时间区间内按键的记录与判断。$_{由于莫名其妙的bug手动排除了所有godot自带的以“ui\_”开头的动作}$
+
+  - **远程攻击实现**。[按<kbd>K/鼠标右键</kbd>射击] 分别实现了bullet类和shooter类。 bullet类下创建了四个继承场景```arrow```、```lightning```、```grapple```、```laser```。分别对应箭矢（有初速受重力影响）、闪电（纯播放动画）、钩爪、激光，实现方式各不相同，私以为是很好的bullet类使用方式示例。shooter为发射子弹的类，实现了子弹的创建与发射。外部调用可用shooter.shoot_config()完成发射子弹的配置，并调用shooter.shoot()完成子弹的创建与发射。
+
+  - **InteractiveGrass实现**。实现了草地与人物的交互。来自[BV1uEr1YXE9t](https://www.bilibili.com/video/BV1uEr1YXE9t)搬运By xcount
+  
+  - **新enemy实现（Fairy）**。实现了敌人的创建与移动。它能发射箭矢（哦对我给箭矢改成别的玩意儿了），还挺萌（猛？）的嘞。*寻路还有点问题*
+
+  - **钩爪实现**。[按<kbd>E/鼠标中键</kbd>射击] 实现了钩爪的创建与发射。如上所述用的是bullet类。按<kbd>space</kbd>键施加三倍力。
+
+  - **激光实现**。[长按<kbd>K/鼠标右键</kbd>射击] 实现了激光的创建与发射。如上所述用的是bullet类。~~采用了对象池，但感觉没什么必要~~
+
+  - **DP命令实现**。[按<kbd>623</kbd>+<kbd>K/鼠标右键</kbd>执行] 实现了DP命令的创建与发射。直接进入Attack3状态
+
+---
+
+很多内容由AI辅助完成。赞美DeepSeek-R1，赞美Cursor。
