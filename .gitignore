@@ -1,0 +1,16 @@
+# Godot 4+ specific ignores
+.godot/
+Exports/1/Tutor - Legend of the brave.exe
+Exports/1/Tutor - Legend of the brave.pck
+Exports/
+addons/copilot-advanced/Copilot.gd
+addons/copilot-advanced/CopilotUI.tscn
+addons/copilot-advanced/GithubCopilot.gd
+addons/copilot-advanced/large_icon.tres
+addons/copilot-advanced/LLM.gd
+addons/copilot-advanced/OpenAIChat.gd
+addons/copilot-advanced/OpenAICompletion.gd
+addons/copilot-advanced/plugin.cfg
+addons/copilot-advanced/Plugin.gd
+addons/copilot-advanced/small_icon.tres
+addons/copilot-advanced/UUID.gd

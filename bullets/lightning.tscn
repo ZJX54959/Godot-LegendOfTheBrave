@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://b5wk8bb8kbn2w"]
+
+[ext_resource type="PackedScene" uid="uid://cev6awq0xpyr5" path="res://bullet.tscn" id="1_lcqfh"]
+[ext_resource type="Script" path="res://bullets/lightning.gd" id="2_2t4ad"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ogjfq"]
+resource_local_to_scene = true
+size = Vector2(36, 36)
+
+[node name="Lightning" instance=ExtResource("1_lcqfh")]
+script = ExtResource("2_2t4ad")
+
+[node name="Outlook" parent="." index="0"]
+position = Vector2(0, -128)
+
+[node name="CollisionShape" parent="Hitbox" index="0"]
+shape = SubResource("RectangleShape2D_ogjfq")

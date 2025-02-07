@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=3 uid="uid://d07c41tgg6nxv"]
+
+[ext_resource type="PackedScene" uid="uid://cev6awq0xpyr5" path="res://bullet.tscn" id="1_pq3sx"]
+[ext_resource type="Script" path="res://bullets/grapple.gd" id="2_57po5"]
+[ext_resource type="Texture2D" uid="uid://bs7ie3xrgboet" path="res://2085.png" id="3_dsfxp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_44b5p"]
+resource_local_to_scene = true
+size = Vector2(36, 36)
+
+[node name="Grapple" instance=ExtResource("1_pq3sx")]
+script = ExtResource("2_57po5")
+segment_count = 6
+swing_stiffness = 0.6
+vertical_bounce = 0.4
+air_resistance = 0.98
+swing_acceleration = 8.0
+max_distance = 384.0
+pull_force = 400.0
+pull_distance = 128.0
+stiffness = 2.4
+damping = 0.2
+sag_factor = 0.2
+tension_threshold = 10.0
+
+[node name="Outlook" parent="." index="0"]
+rotation = 2.35619
+scale = Vector2(-0.2, 0.2)
+texture = ExtResource("3_dsfxp")
+
+[node name="Hitbox" parent="." index="2"]
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape" parent="Hitbox" index="0"]
+shape = SubResource("RectangleShape2D_44b5p")
+
+[node name="RayCast2D" type="RayCast2D" parent="." index="3"]
+position = Vector2(-18, 0)
+target_position = Vector2(31, 0)
+collision_mask = 129
+
+[node name="AnimationPlayer" parent="." index="4"]
+libraries = {}
