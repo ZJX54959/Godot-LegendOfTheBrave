@@ -6,6 +6,25 @@ extends Area2D
 @export var bendGrassAnimationSpeed := 0.3
 @export var grassReturnAnimationSpeed := 5.0
 
+
+var PINK_TULIP = load("res://pink_tulip.png")
+var RED_ROSE = load("res://red_rose.png")
+
+var Texs := [
+	PINK_TULIP,
+	RED_ROSE,
+]
+
+
+func _ready() -> void:
+	sprite_2d.texture = Texs.pick_random()
+	#while sprite_2d.texture.get_size() > Vector2(16, 16):
+		#sprite_2d.texture *= Vector2(.5, .5)
+	if sprite_2d.texture == RED_ROSE:
+		scale *= .25
+		sprite_2d.position.y -= sprite_2d.texture.get_size().y / 4.
+
+
 func _on_body_entered(body: Node2D) -> void:
 	if body == get_tree().get_first_node_in_group("player") or true:
 		var direction := global_position.direction_to(body.global_position)

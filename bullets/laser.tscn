@@ -1,21 +1,22 @@
-[gd_scene load_steps=14 format=3 uid="uid://cuveaylm6xlae"]
+[gd_scene load_steps=15 format=3 uid="uid://cuveaylm6xlae"]
 
 [ext_resource type="PackedScene" uid="uid://cev6awq0xpyr5" path="res://bullet.tscn" id="1_4fyfs"]
 [ext_resource type="Script" path="res://bullets/laser.gd" id="2_ilsgk"]
 [ext_resource type="Texture2D" uid="uid://bq5fqiraeswp4" path="res://laser1.png" id="3_50kxb"]
+[ext_resource type="Texture2D" uid="uid://bcsfs4muf7fur" path="res://laser1.2.png" id="4_37tfa"]
 [ext_resource type="Texture2D" uid="uid://dstrdusq0bdpk" path="res://laser1.1.png" id="4_e2nw1"]
 [ext_resource type="Script" path="res://classes/Hitbox.gd" id="4_ry6vg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hseig"]
-atlas = ExtResource("4_e2nw1")
+atlas = ExtResource("4_37tfa")
 region = Rect2(67, 1, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mc1fx"]
-atlas = ExtResource("4_e2nw1")
+atlas = ExtResource("4_37tfa")
 region = Rect2(34, 1, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fmp42"]
-atlas = ExtResource("4_e2nw1")
+atlas = ExtResource("4_37tfa")
 region = Rect2(1, 1, 32, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2wed6"]
@@ -93,8 +94,6 @@ shape = SubResource("RectangleShape2D_2wed6")
 
 [node name="Outlook" parent="." index="1"]
 texture = ExtResource("4_e2nw1")
-hframes = 3
-vframes = 4
 region_rect = Rect2(34, 1, 32, 32)
 
 [node name="CollisionShape" parent="Hitbox" index="0"]

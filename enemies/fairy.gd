@@ -13,7 +13,7 @@ const KNOCKBACK_AMOUNT := 100.0
 const TRACK_SPEED := 120.0
 const LOST_TIME := 2.0
 
-@export var fairy_bullet: PackedScene = preload("res://bullets/arrow.tscn")
+@export var fairy_bullet: PackedScene = preload("res://bullets/star.tscn")
 
 @onready var shooter: Shooter = $Shooter
 @onready var attack_timer: Timer = $AttackTimer
@@ -163,10 +163,11 @@ func transition_state(from: State, to: State) -> void:
 				Vector2.RIGHT
 				).with_speed(BULLET_SPEED).with_scale(Vector2(0.6, 0.6)).with_ways(8+randi_range(0, 2)).with_custom_config(
 					func(bullet): 
-						bullet.life = 1.5
+						#bullet.life = 1.5
 						bullet.hitbox.set_collision_mask_value(8, false)
 						bullet.hitbox.set_collision_mask_value(7, true)
-						bullet.allocate_tex.call(load("res://fairy1.png"))
+						#bullet.allocate_tex.call(load("res://fairy1.png"))
+						bullet.scale *= 0.4
 						)
 			
 			print(shooter.shoot(config, Shooter.SHOOT_PATTERN.FLOWER))

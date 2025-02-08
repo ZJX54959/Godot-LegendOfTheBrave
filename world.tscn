@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bq1ffqsx3s08a"]
+[gd_scene load_steps=12 format=3 uid="uid://bq1ffqsx3s08a"]
 
 [ext_resource type="Texture2D" uid="uid://cnpcfn801ya18" path="res://Legacy-Fantasy - High Forest 2.3/Assets/Tree-Assets.png" id="1_fiqiu"]
 [ext_resource type="Script" path="res://world.gd" id="1_t4otw"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://ltb88u1tvbta" path="res://interactive_grass.tscn" id="6_5ecua"]
 [ext_resource type="PackedScene" uid="uid://bqqlu53rk6ilm" path="res://enemies/boar.tscn" id="6_45416"]
 [ext_resource type="PackedScene" uid="uid://ca2ckfrtb3txc" path="res://enemies/fairy.tscn" id="8_o11oi"]
+[ext_resource type="PackedScene" uid="uid://joiod8ext8mx" path="res://bullets/star.tscn" id="9_ujw1q"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yueiq"]
 texture = ExtResource("1_fiqiu")
@@ -559,3 +560,4 @@ position = Vector2(299, 172)
 
 [node name="Fairy" parent="." instance=ExtResource("8_o11oi")]
 position = Vector2(430, 97)
+fairy_bullet = ExtResource("9_ujw1q")

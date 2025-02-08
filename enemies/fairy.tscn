@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dkeddtpeslppy" path="res://enemies/enemy.tscn" id="1_bcbrj"]
 [ext_resource type="Script" path="res://enemies/fairy.gd" id="2_3iqlv"]
-[ext_resource type="PackedScene" uid="uid://cvunfllip0s52" path="res://bullets/arrow.tscn" id="3_0lxme"]
+[ext_resource type="PackedScene" uid="uid://joiod8ext8mx" path="res://bullets/star.tscn" id="3_wpxv7"]
 [ext_resource type="Script" path="res://Shooter.gd" id="4_ay2ru"]
 [ext_resource type="Texture2D" uid="uid://du52xjnvom7o5" path="res://fairy1.png" id="4_sc26u"]
 
@@ -501,7 +501,7 @@ _data = {
 [node name="Fairy" instance=ExtResource("1_bcbrj")]
 scale = Vector2(0.199539, 0.199539)
 script = ExtResource("2_3iqlv")
-fairy_bullet = ExtResource("3_0lxme")
+fairy_bullet = ExtResource("3_wpxv7")
 
 [node name="WallChecker" type="RayCast2D" parent="Graphics" index="0"]
 target_position = Vector2(72, 0)
