@@ -174,13 +174,20 @@ func update_laser_parts(visible_segments: int, total_segments: float) -> void:
 			segment_pool.append(seg)
 		active_segments.resize(target_segments)
 	
-	# 复用对象池
+	# 复用对象池时保持逆序添加（确保头部最后渲染）
 	for i in range(active_segments.size(), target_segments):
-		active_segments.append(segment_pool.pop_back() if not segment_pool.is_empty() else create_segment())
-	
+		var new_seg = segment_pool.pop_back() if not segment_pool.is_empty() else create_segment()
+		active_segments.append(new_seg)
+		# 将新段移动到所有现有子节点之后
+		bodies.move_child(new_seg, bodies.get_child_count())
+
 	# 更新所有段
 	for i in range(active_segments.size()):
 		var seg = active_segments[i] as Sprite2D
+		# 通过设置绘制顺序确保头部在最上层
+		seg.z_index = 2 if i == active_segments.size() - 1 else (1 if i > 0 else 0)
+		
+		seg.show()
 		
 		if i == active_segments.size() - 1:  # 头部
 			if not update_laser_part_outlook(seg, "head"):
