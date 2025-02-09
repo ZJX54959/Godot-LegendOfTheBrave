@@ -510,7 +510,17 @@ target_position = Vector2(72, 0)
 target_position = Vector2(512, 0)
 collision_mask = 3
 
-[node name="Sprite2D" parent="Graphics" index="2"]
+[node name="PlayerChecker2" type="RayCast2D" parent="Graphics" index="2"]
+rotation = -0.349066
+target_position = Vector2(512, 0)
+collision_mask = 3
+
+[node name="PlayerChecker3" type="RayCast2D" parent="Graphics" index="3"]
+rotation = 0.349066
+target_position = Vector2(512, 0)
+collision_mask = 3
+
+[node name="Sprite2D" parent="Graphics" index="4"]
 texture = ExtResource("4_sc26u")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Graphics/Hitbox" index="0"]

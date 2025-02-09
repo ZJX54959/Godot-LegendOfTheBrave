@@ -12,6 +12,10 @@ enum State {
 const KNOCKBACK_AMOUNT := 100.0
 const TRACK_SPEED := 120.0
 const LOST_TIME := 2.0
+const BULLET_SPEED := 180.0
+const MOVE_SPEED := 80.0
+const CHECKER_DISTANCE := 512.0
+
 
 @export var fairy_bullet: PackedScene = preload("res://bullets/star.tscn")
 
@@ -20,16 +24,23 @@ const LOST_TIME := 2.0
 @onready var hitbox: Hitbox = $Graphics/Hitbox
 @onready var wall_checker: RayCast2D = $Graphics/WallChecker
 @onready var player_checker: RayCast2D = $Graphics/PlayerChecker
+@onready var player_checker_2: RayCast2D = $Graphics/PlayerChecker2
+@onready var player_checker_3: RayCast2D = $Graphics/PlayerChecker3
 # @onready var wall_checker: RayCast2D = $WallChecker
 # @onready var player_checker: RayCast2D = $PlayerChecker
-const BULLET_SPEED := 180.0
-const MOVE_SPEED := 80.0
+@onready var player_checkers: Array[RayCast2D] = [
+	player_checker,
+	player_checker_2,
+	player_checker_3,
+]
 
 var attack_pattern := Shooter.SHOOT_PATTERN.FLOWER
 var pending_damages: Array[Damage] = []
 var last_known_position: Vector2
 var lost_timer: float = 0.0
 var dir: Vector2 = Vector2.RIGHT
+
+
 
 func _ready() -> void:
 	super._ready()
@@ -60,20 +71,30 @@ func tick_physics(state: State, delta: float) -> void:
 			if can_see_player():
 				last_known_position = player_checker.get_collision_point()
 				dir = (last_known_position - global_position).normalized()
+				lost_timer = 0.0  # 重置丢失计时器
 				update_checker_direction()
 			else:
-				dir = (last_known_position - global_position).normalized()
-				player_checker.rotation = randf_range(-1, 1)
+				# 平滑转向最后已知位置
+				var target_dir = (last_known_position - global_position).normalized()
+				dir = dir.lerp(target_dir, delta * 4)  # 增加转向平滑
 				update_checker_direction()
-				if player_checker.is_colliding() and not can_see_player():
-					if player_checker.get_collision_point().distance_to(position) < 16.0:
-						dir = dir.bounce(player_checker.get_collision_normal())
-						update_checker_direction()
-			move(TRACK_SPEED, delta)
-			
-			# 接近目标后攻击
-			# if global_position.distance_to(last_known_position) < 64.0:
-			# 	state_machine.transition_to(State.ATTACK)
+				
+				# 定期随机扫描
+				if state_machine.state_time - floor(state_machine.state_time) < 0.5:
+					player_checker.rotation = randf_range(-PI/4, PI/4)
+				
+				# 障碍物回避
+				if wall_checker.is_colliding():
+					var normal = wall_checker.get_collision_normal()
+					dir = dir.bounce(normal).rotated(randf_range(-PI/8, PI/8))
+					update_checker_direction()
+				
+				# 接近目标后重新评估
+				if global_position.distance_to(last_known_position) < 64.0:
+					if can_see_player():
+						state_machine.transition_to(State.ATTACK)
+					else:
+						lost_timer += delta * 2  # 加速丢失计时
 		
 		State.ATTACK:
 			# 攻击时短暂悬停
@@ -200,16 +221,20 @@ func _on_attack_timer_timeout() -> void:
 	state_machine.transition_to(State.ATTACK)
 
 func update_checker_direction() -> void:
-	# 更新检测器方向与移动方向一致
+	# 防止方向归零
 	if dir.is_zero_approx():
 		dir = Vector2.RIGHT.rotated(randf_range(0, TAU))
+	
+	# 新增防卡死随机偏移
+	if wall_checker.is_colliding() and randf() < 0.3:
+		dir = dir.rotated(randf_range(-PI/4, PI/4))
 	
 	# 根据水平方向更新父类direction（控制图形翻转）
 	direction = Direction.LEFT if dir.x < 0 else Direction.RIGHT
 	
 	# 更新检测器方向（需考虑图形翻转后的坐标系）
 	var graphics_scale = graphics.scale.x
-	player_checker.target_position = dir.normalized() * 384.0 * Vector2(-graphics_scale, 1)
+	player_checker.target_position = dir.normalized() * CHECKER_DISTANCE * Vector2(-graphics_scale, 1)
 	wall_checker.target_position.x = sign(dir.normalized()).x * 72.0 * -graphics_scale
 
 func move(speed: float, delta: float) -> void:
@@ -227,9 +252,18 @@ func move(speed: float, delta: float) -> void:
 # 	pass
 
 func can_see_player() -> bool:
-	if not player_checker.is_colliding():
-		return false
-	return player_checker.get_collider() is Player
+	var result := false
+	var colliding := false
+	for checker in player_checkers:
+		# print(checker)
+		if not checker:
+			continue
+		colliding = colliding or checker.is_colliding()
+		result = result or (checker.is_colliding() and checker.get_collider() is Player)
+		# print(colliding, result)
+	# if result:
+		# print("can see player")
+	return result
 
 
 func _on_hurtbox_hurt(hitbox: Variant, damage: Variant) -> void:
