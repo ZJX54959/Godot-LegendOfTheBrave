@@ -90,41 +90,32 @@ func record_input(event: InputEvent) -> void:
 	
 	# 修改后的按钮处理逻辑
 	if event.is_pressed() and not event.is_echo():
-		var action := _get_action_for_event(event)
-		if action.is_empty() or action in ["move_left", "move_right", "move_up", "move_down"]:
+		var actions := _get_action_for_event(event)
+		if actions.is_empty() or actions.any(func(a): return a in ["move_left", "move_right", "move_up", "move_down"]):
 			return
 		
 		# 新增：自动结束同一设备的未释放按钮
 		var device_id = event.get_device()
-		for record in _buffer:
-			if record.button == action and not record.is_released and record.device_id == device_id:
-				record.is_released = true
-				record.duration = current_time - record.timestamp
-		
-		# 记录新按钮（添加设备ID）
-		_held_buttons[action] = current_time
-		var new_record = InputRecord.new(Vector2.ZERO, action, current_time)
-		new_record.device_id = device_id  # 新增设备ID记录
-		_buffer.append(new_record)
-		# print("Pressed: ", action,) # " | _buffer[-1].button: ", _buffer[-1].button)
-		# var text: String = ""
-		# for i in _buffer:
-		# 	text += " | " + i.button + ":" + var_to_str(i.duration)
-		# print(text)
+		for action in actions:
+			for record in _buffer:
+				if record.button == action and not record.is_released and record.device_id == device_id:
+					record.is_released = true
+					record.duration = current_time - record.timestamp
+			
+			# 记录新按钮（添加设备ID）
+			_held_buttons[action] = current_time
+			var new_record = InputRecord.new(Vector2.ZERO, action, current_time)
+			new_record.device_id = device_id
+			_buffer.append(new_record)
 	
 	elif event.is_released() and not event.is_echo():
-		# print(event)
-		var action := _get_action_for_event(event)
-		# if event.has_method("get_keycode") and event.get_keycode() == 69:print(action)
-		# if action.begins_with("ui_"): print(action, " | ", event, " | ", Input.is_key_pressed(KEY_CTRL))
-		if action in _held_buttons:
-			# print("Released: ", action)
-			# 仅标记释放，实际duration由physics_process更新
-			for record in _buffer:
-				if record.button == action and not record.is_released:
-					record.is_released = true
-			_held_buttons.erase(action)
-		# print("Released: ", action, " (", _buffer.get_last_button_record(action).duration, "s)")
+		var actions := _get_action_for_event(event)
+		for action in actions:
+			if action in _held_buttons:
+				for record in _buffer:
+					if record.button == action and not record.is_released:
+						record.is_released = true
+				_held_buttons.erase(action)
 
 # 检测已完成输入的指令（按钮必须已释放）
 func check_command(pattern: Array) -> bool:
@@ -216,15 +207,13 @@ func _cleanup():
 # 	return "\n".join(res)
 
 
-# 通过InputMap获取事件对应的action名称
-func _get_action_for_event(event: InputEvent) -> String:
-	# var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
-	# if not input_dir.is_zero_approx() and not event.is_echo():
-	# 	return var_to_str(input_dir)
+# 通过InputMap获取事件对应的所有action名称
+func _get_action_for_event(event: InputEvent) -> Array[String]:
+	var matched_actions: Array[String] = []
 	for action in InputMap.get_actions().filter(func(a): return not a.begins_with("ui_")):
 		if event.is_action(action):
-			return action
-	return ""
+			matched_actions.append(action)
+	return matched_actions
 
 # 更新按钮持续时间（处理所有未完成的记录）
 # func _update_button_duration(action: String, total_duration: float) -> void:
