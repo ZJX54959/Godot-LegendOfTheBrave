@@ -209,7 +209,7 @@ func transition_state(from: State, to: State) -> void:
 			
 			# stats.health -= int(total_damage)
 			# velocity = knockback_dir.normalized() * KNOCKBACK_AMOUNT
-			print("[Enemy]Fairy: total_damage: ", total_damage, " knockback_dir: ", knockback_dir)
+			# print("[Enemy]Fairy: total_damage: ", total_damage, " knockback_dir: ", knockback_dir)
 			pending_damages.clear()
 			update_checker_direction()
 		

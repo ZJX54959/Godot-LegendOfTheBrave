@@ -28,6 +28,11 @@ const GROUND_STATES := [
 const ATTACK_STATES := [
 	State.ATTACK_1, State.ATTACK_2, State.ATTACK_3
 ]
+const INACTIVE_STATES := [
+	# State.
+	State.SLIDING_START, State.SLIDING_LOOP, State.SLIDING_END,
+	State.HURT, State.DYING
+]
 const RUN_SPEED := 160.0
 const JUMP_VELOCITY := -320.0
 const FLOOR_ACCELERATION := RUN_SPEED / 0.2
@@ -36,7 +41,7 @@ const SWING_ACCELERATION := RUN_SPEED / 10.
 const WALL_JUMP_VELOCITY := Vector2(380, -280)
 const WALL_JUMP_ENERGY := 1.0
 const KNOCKBACK_AMOUNT := 512.0
-const SLIDING_DURATION := 0.3
+const SLIDING_DURATION := 0.5
 const SLIDING_SPEED := 256.0
 const SLIDING_ENERGY := 4.0
 const LANDING_HEIGHT := 100.0
@@ -56,6 +61,7 @@ var direction := Input.get_axis("move_left", "move_right")
 var slide_dir := direction
 var active_grapples: Array[Bullet] = []
 var hooked := false
+var interacting_with: Array[Interactable]
 
 @onready var graphics: Node2D = $Graphics
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -75,6 +81,7 @@ var hooked := false
 @onready var shooter: Shooter = $Shooter
 @onready var wave: Sprite2D = $Wave
 @onready var hitbox: Hitbox = $Graphics/Hitbox
+@onready var interaction_action: AnimatedSprite2D = $InteractionAction
 
 
 '''
@@ -95,8 +102,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	# 	# _clear_all_grapples()
 	# 	hooked = false
 
+	if event.is_action_pressed("interact") and interacting_with:
+		interacting_with.back().interact(self)
+
 
 func tick_physics(state:State, delta: float) -> void:
+	interaction_action.visible = not interacting_with.is_empty()
+
 	if not get_tree().get_nodes_in_group("Enemy").is_empty():
 		aimdir = get_tree().get_nodes_in_group("Enemy").pick_random().global_position-global_position
 	else: aimdir = Vector2.RIGHT if graphics.scale.x > 0 else Vector2.LEFT
@@ -104,7 +116,8 @@ func tick_physics(state:State, delta: float) -> void:
 		graphics.modulate.a = 0.5 * sin(Time.get_ticks_msec()) + 0.5
 	else:
 		graphics.modulate.a = 1
-	direction = Input.get_axis("move_left", "move_right")
+	if not state_machine.state in INACTIVE_STATES:
+		direction = Input.get_axis("move_left", "move_right")
 	if not is_zero_approx(direction):
 		graphics.scale.x = -1 if direction<0 else 1
 
@@ -363,17 +376,18 @@ func transition_state(from: State, to: State) -> void:
 			animation_player.play("die")
 			hitstop(1)
 			invincible_timer.stop()
+			interacting_with.clear()
 		
 		State.SLIDING_START:
 			animation_player.play("sliding_start")
 			slide_request_timer.stop()
 			slide_dir = direction if not is_zero_approx(direction) else graphics.scale.x
 			stats.energy -= SLIDING_ENERGY
-			hitbox.damage = Damage.new(4, self, 1, 20, graphics.scale.x * Vector2.RIGHT)
+			hitbox.damage = Damage.new(4, self, 1, 50, graphics.scale.x * Vector2.RIGHT)
 		
 		State.SLIDING_LOOP:
 			animation_player.play("sliding_loop")
-			hitbox.damage = Damage.new(3, self, 1, 20, graphics.scale.x * Vector2.RIGHT)
+			hitbox.damage = Damage.new(3, self, 1, 50, graphics.scale.x * Vector2.RIGHT)
 		
 		State.SLIDING_END:
 			animation_player.play("sliding_end")
@@ -627,3 +641,13 @@ func hitstop(type: int = 0, time: float = 0.05, time_scale: float = 0.05):
 		Engine.time_scale = 1
 		await sctw.finished
 		wave.scale = Vector2.ZERO
+func register_interactable(interactable: Interactable) -> void:
+	if state_machine.state in INACTIVE_STATES:
+		return
+	if interacting_with.has(interactable):
+		return
+	interacting_with.append(interactable)
+	interaction_action.visible = true
+func unregister_interactable(interactable: Interactable) -> void:
+	interacting_with.erase(interactable)
+	interaction_action.visible = interacting_with.size() > 0

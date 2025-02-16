@@ -143,7 +143,7 @@ func transition_state(from: State, to: State) -> void:
 			
 			# stats.health -= int(total_damage)
 			# velocity = total_knockback * KNOCKBACK_AMOUNT
-			print("[Enemy]Boar: total_damage: ", total_damage)
+			# print("[Enemy]Boar: total_damage: ", total_damage)
 			pending_damages.clear()
 			
 			# direction = Direction.LEFT if total_knockback.x > 0 else Direction.RIGHT
@@ -160,7 +160,7 @@ func _on_hurtbox_hurt(hitbox: Hitbox, damage: Damage) -> void:#把伤害从一�
 	# pending_damage = Damage.new()
 	# pending_damage.amount = 1
 	# pending_damage.source = hitbox.owner#把pending_damage改成数组、或者用算法混合，以实现同帧内多个伤害来源的处理
-	print("damage: ", damage)
+	print("damage: ", damage.source.name)
 	if handle_damage(damage):
 		"""
 		不对啊...现在伤害处理的逻辑全移到handle_damage里了，那pending_damages是干嘛的？

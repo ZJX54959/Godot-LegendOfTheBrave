@@ -66,7 +66,7 @@ func set_invincible(frames: float, hurt_layer: int = init_hurt_layer) -> void:
 
 # 伤害处理主逻辑（供子类调用）
 func handle_damage(damage: Damage) -> bool:
-	print("is_invincible: ", is_invincible, " | damage: ", damage, " | damage.amount: ", damage.amount, " | damage.inv_frame: ", damage.inv_frame, " | damage.source: ", damage.source)
+	# print("is_invincible: ", is_invincible, " | damage: ", damage, " | damage.amount: ", damage.amount, " | damage.inv_frame: ", damage.inv_frame, " | damage.source: ", damage.source)
 	if is_invincible:
 		return false
 	
