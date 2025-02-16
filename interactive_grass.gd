@@ -21,7 +21,7 @@ func _ready() -> void:
 	#while sprite_2d.texture.get_size() > Vector2(16, 16):
 		#sprite_2d.texture *= Vector2(.5, .5)
 	if sprite_2d.texture == RED_ROSE:
-		scale *= .25
+		sprite_2d.scale *= .25
 		sprite_2d.position.y -= sprite_2d.texture.get_size().y / 4.
 
 
