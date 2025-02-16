@@ -37,6 +37,8 @@ enum EXPIRE_REASON {
 @export var type = BASIC_TYPE.BASIC_UR_BULLET
 @export var agile: float = 1
 @export var damage_interval: int = 1
+@export var knockback_dir: Vector2 = Vector2.ZERO
+@export var knockback_force: float = 0
 
 @export var aim: Node2D = null
 @export var from_owner: Node2D = null
@@ -44,6 +46,7 @@ enum EXPIRE_REASON {
 @export var immortal: bool = false
 @export var outscreen_expired: bool = true
 @export var auto_align: bool = true
+@export var auto_knockback: bool = true
 
 @export var gravity: bool = false
 @export var gravity_scale: float = 9.8
@@ -126,7 +129,7 @@ func _on_hitbox_hit(_hurtbox) -> void:
 
 	# hurtbox.set_deferred("monitoring", false)
 	# hurtbox.owner._on_hurtbox_hurt(hitbox, Damage.new(damage, from_owner if from_owner else self))
-	hitbox.damage = Damage.new(damage, from_owner if from_owner else self, damage_interval)
+	hitbox.damage = Damage.new(damage, from_owner if from_owner else self, damage_interval, knockback_force, knockback_dir)
 	hitpoint -= 1
 	# invincibility_frame(hurtbox)
 	
@@ -210,5 +213,7 @@ func _physics_process(delta: float) -> void:
 		rotation = velocity.angle()
 	
 	velocity = get_velocity(delta)
+	if auto_knockback:
+		knockback_dir = velocity.normalized()
 	move(delta)
 	

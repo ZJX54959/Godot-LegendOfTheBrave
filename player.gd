@@ -331,7 +331,7 @@ func transition_state(from: State, to: State) -> void:
 			is_combo_requested = false
 			attack_request_timer.stop()
 			position.x += graphics.scale.x * 5
-			hitbox.damage = Damage.new(30, self, 10)
+			hitbox.damage = Damage.new(30, self, 10, 25, Vector2(0, -1) * graphics.scale.x)
 		
 		State.ATTACK_COMBO:
 			animation_player.play("attack_combo")
@@ -343,14 +343,17 @@ func transition_state(from: State, to: State) -> void:
 			animation_player.play("hurt")
 			hitstop()
 			
-			var total_damage := 0.
-			var knockback_dir := Vector2.ZERO
+			var total_knockback := Vector2.ZERO
+			var total_damage := 0.0
 			for dmg in pending_damages:
 				total_damage += dmg.amount
-				knockback_dir += dmg.source.global_position.direction_to(global_position)
+				# 计算每个伤害源的击退向量
+				var dir = dmg.knockback_dir if not dmg.knockback_dir.is_zero_approx() else \
+					(global_position - dmg.source.global_position).normalized()
+				total_knockback += dir * dmg.knockback_force
 			
 			stats.health -= int(total_damage)
-			velocity = knockback_dir.normalized() * KNOCKBACK_AMOUNT
+			velocity = total_knockback * KNOCKBACK_AMOUNT
 			pending_damages.clear()
 			
 			invincible_timer.start()
@@ -366,11 +369,11 @@ func transition_state(from: State, to: State) -> void:
 			slide_request_timer.stop()
 			slide_dir = direction if not is_zero_approx(direction) else graphics.scale.x
 			stats.energy -= SLIDING_ENERGY
-			hitbox.damage = Damage.new(4, self)
+			hitbox.damage = Damage.new(4, self, 1, 20, graphics.scale.x * Vector2.RIGHT)
 		
 		State.SLIDING_LOOP:
 			animation_player.play("sliding_loop")
-			hitbox.damage = Damage.new(3, self)
+			hitbox.damage = Damage.new(3, self, 1, 20, graphics.scale.x * Vector2.RIGHT)
 		
 		State.SLIDING_END:
 			animation_player.play("sliding_end")

@@ -14,6 +14,7 @@ enum Direction {
 		graphics.scale.x = -direction
 @export var max_speed : float = 180
 @export var acceleration : float = 2000
+@export var knockback_amount: float = 100 # 越大越容易被击退
 
 var default_gravity := ProjectSettings.get("physics/2d/default_gravity") as float
 
@@ -23,7 +24,7 @@ var default_gravity := ProjectSettings.get("physics/2d/default_gravity") as floa
 @onready var stats: Stats = $Stats
 @onready var hurtbox: Hurtbox = $Graphics/Hurtbox
 
-@onready var init_hurt_layer: int = hurtbox.collision_layer
+@onready var init_hurt_layer: int = hurtbox.collision_layer # 160 = 128 + 32 = 0b10100000 = Layer 6 & 8 ON
 
 # 添加无敌帧系统
 const DEFAULT_INV_FRAME := 16  # 默认无敌时间16帧
@@ -53,6 +54,7 @@ func _physics_process(delta: float) -> void:
 		# print("hurtbox.collision_layer: ", hurtbox.collision_layer)
 	if invincible_timer > 0:
 		invincible_timer -= delta
+		# print("invincible_timer: ", invincible_timer * ProjectSettings.get("physics/common/physics_ticks_per_second"))
 		# print("invincible_timer: ", invincible_timer)
 
 # 公开接口：设置无敌帧（供子类调用）
@@ -64,7 +66,7 @@ func set_invincible(frames: float, hurt_layer: int = init_hurt_layer) -> void:
 
 # 伤害处理主逻辑（供子类调用）
 func handle_damage(damage: Damage) -> bool:
-	print("is_invincible: ", is_invincible, "damage: ", damage, "damage.amount: ", damage.amount, "damage.inv_frame: ", damage.inv_frame, "damage.source: ", damage.source)
+	print("is_invincible: ", is_invincible, " | damage: ", damage, " | damage.amount: ", damage.amount, " | damage.inv_frame: ", damage.inv_frame, " | damage.source: ", damage.source)
 	if is_invincible:
 		return false
 	
@@ -73,10 +75,14 @@ func handle_damage(damage: Damage) -> bool:
 		hitstop(0)
 	else: 
 		hitstop(1)
-	var inv_frame = damage.inv_frame if damage.inv_frame > 0 else DEFAULT_INV_FRAME
-	set_invincible(inv_frame, 0b100000)
 	
-	stats.health -= damage.amount
+	var inv_frame = damage.inv_frame if damage.inv_frame > 0 else DEFAULT_INV_FRAME
+	set_invincible(inv_frame, 0)
+	
+	stats.health -= int(damage.amount)
+
+	velocity += damage.knockback_dir * damage.knockback_force * knockback_amount
+
 	return true
 
 

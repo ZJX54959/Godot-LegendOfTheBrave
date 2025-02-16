@@ -46,6 +46,7 @@ func _ready() -> void:
 	super._ready()
 	attack_timer.start(randf_range(1.5, 3.0))
 	# motion_mode = MotionMode.MOTION_MODE_FLOATING
+	knockback_amount = 2000
 
 func tick_physics(state: State, delta: float) -> void:
 
@@ -206,8 +207,9 @@ func transition_state(from: State, to: State) -> void:
 				total_damage += dmg.amount
 				knockback_dir += dmg.source.global_position.direction_to(global_position)
 			
-			stats.health -= int(total_damage)
-			velocity = knockback_dir.normalized() * KNOCKBACK_AMOUNT
+			# stats.health -= int(total_damage)
+			# velocity = knockback_dir.normalized() * KNOCKBACK_AMOUNT
+			print("[Enemy]Fairy: total_damage: ", total_damage, " knockback_dir: ", knockback_dir)
 			pending_damages.clear()
 			update_checker_direction()
 		

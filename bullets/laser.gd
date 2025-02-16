@@ -43,6 +43,7 @@ func _ready() -> void:
 	hitpoint = 128
 	damage = 1
 	damage_interval = 4
+	knockback_force = 15
 	from_owner = owner_node
 	laser_hitbox.hit.connect(_on_hitbox_hit)
 	set_direction(direction)
@@ -269,12 +270,13 @@ func get_raycast_length() -> float:
 
 func set_direction(new_direction: Vector2) -> void:
 	direction = new_direction.normalized()
+	knockback_dir = direction
 	# 更新射线方向
 	# ray_cast.target_position = initial_direction * max_length
 	bodies.rotation = direction.angle()
 
 func _on_hitbox_hit(_hurtbox: Variant) -> void:
-	laser_hitbox.damage = Damage.new(damage, from_owner if from_owner else self, damage_interval)
+	laser_hitbox.damage = Damage.new(damage, from_owner if from_owner else self, damage_interval, knockback_force, knockback_dir)
 	hitpoint -= 1
 
 func is_outscreen() -> bool:

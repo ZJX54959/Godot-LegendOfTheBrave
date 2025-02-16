@@ -10,6 +10,8 @@ func _ready() -> void:
 	auto_align = false
 	outscreen_expired = false
 	homing = false
+	knockback_force = 3.
+	knockback_dir = Vector2(0, 0)
 	animation_player.play("Lightning")
 
 func _physics_process(delta: float) -> void:

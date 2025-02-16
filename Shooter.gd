@@ -28,6 +28,8 @@ class ShootConfig:
 	var scale := Vector2.ONE
 	var homing := false
 	var aim: Node2D = null
+	var knockback_dir: Vector2 = Vector2.ZERO
+	var knockback_force: float = 0
 	var ways: int = 1
 	var spread_angle: float = 1
 	var custom_config: Callable = func(_b): pass
@@ -75,6 +77,11 @@ class ShootConfig:
 	
 	func with_scale(new_scale: Vector2) -> ShootConfig:
 		scale = new_scale
+		return self
+	
+	func with_knockback(dir: Vector2, force: float) -> ShootConfig:
+		knockback_dir = dir
+		knockback_force = force
 		return self
 	
 	func with_ways(way_count: int) -> ShootConfig:
@@ -159,6 +166,11 @@ func _create_bullet(config: ShootConfig) -> Bullet:
 	bullet.scale = config.scale
 	bullet.homing = config.homing
 	bullet.aim = config.aim
+	bullet.knockback_force = config.knockback_force
+
+	if config.knockback_dir.length() > 0:
+		bullet.knockback_dir = config.knockback_dir
+		bullet.auto_knockback = false
 	
 	if config.custom_config_before_ready.is_valid():
 		config.custom_config_before_ready.call(bullet)

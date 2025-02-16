@@ -20,6 +20,11 @@ var pending_damages: Array[Damage] = []
 @onready var hitbox: Hitbox = $Graphics/Hitbox
 
 
+func _ready() -> void:
+	super._ready()
+	knockback_amount = 20
+
+
 func can_see_player() -> bool:
 	if not player_checker.is_colliding():
 		return false
@@ -114,11 +119,11 @@ func transition_state(from: State, to: State) -> void:
 			if not floor_checker.is_colliding():
 				direction *= -1
 				floor_checker.force_raycast_update()
-			hitbox.damage = Damage.new(1, self)
+			hitbox.damage = Damage.new(1 + velocity.length()/100., self)
 		
 		State.RUN:
 			animation_player.play("run")
-			hitbox.damage = Damage.new(5, self)
+			hitbox.damage = Damage.new(5 + velocity.length()/100., self)
 		
 		State.HURT:
 			animation_player.play("hit")
@@ -128,16 +133,20 @@ func transition_state(from: State, to: State) -> void:
 			# stats.health -= pending_damage.amount
 
 			var total_damage := 0.
-			var knockback_dir := Vector2.ZERO
+			# var total_knockback := Vector2.ZERO
 			for dmg in pending_damages:
 				total_damage += dmg.amount
-				knockback_dir += dmg.source.global_position.direction_to(global_position)
+				# var dir = dmg.knockback_dir if not dmg.knockback_dir.is_zero_approx() else \
+					# (global_position - dmg.source.global_position).normalized()
+				# total_knockback += dir * dmg.knockback_force
+				pass
 			
-			stats.health -= int(total_damage)
-			velocity = knockback_dir.normalized() * KNOCKBACK_AMOUNT
+			# stats.health -= int(total_damage)
+			# velocity = total_knockback * KNOCKBACK_AMOUNT
+			print("[Enemy]Boar: total_damage: ", total_damage)
 			pending_damages.clear()
 			
-			direction = Direction.LEFT if knockback_dir.x > 0 else Direction.RIGHT
+			# direction = Direction.LEFT if total_knockback.x > 0 else Direction.RIGHT
 			
 			# pending_damage = null
 		
@@ -151,5 +160,9 @@ func _on_hurtbox_hurt(hitbox: Hitbox, damage: Damage) -> void:#把伤害从一�
 	# pending_damage = Damage.new()
 	# pending_damage.amount = 1
 	# pending_damage.source = hitbox.owner#把pending_damage改成数组、或者用算法混合，以实现同帧内多个伤害来源的处理
+	print("damage: ", damage)
 	if handle_damage(damage):
+		"""
+		不对啊...现在伤害处理的逻辑全移到handle_damage里了，那pending_damages是干嘛的？
+		"""
 		pending_damages.append(damage)
