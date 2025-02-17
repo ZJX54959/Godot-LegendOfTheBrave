@@ -1,6 +1,11 @@
 class_name Player
 extends CharacterBody2D
 
+enum Direction {
+	LEFT = -1,
+	RIGHT = +1,
+}
+
 enum State {
 	IDLE,
 	RUNNING,
@@ -48,6 +53,12 @@ const LANDING_HEIGHT := 100.0
 const MAX_GRAPPLES = 3
 
 @export var can_combo := false
+@export var direction := Direction.RIGHT:
+	set(v):
+		direction = v
+		if not is_node_ready():
+			await ready
+		graphics.scale.x = direction
 
 var default_gravity := ProjectSettings.get("physics/2d/default_gravity") as float
 var is_first_tick := false
@@ -57,8 +68,8 @@ var pending_damages: Array[Damage] = []
 var fall_from_y: float 
 var aimdir: Vector2
 var can_air_attack := false
-var direction := Input.get_axis("move_left", "move_right")
-var slide_dir := direction
+# var direction := Input.get_axis("move_left", "move_right")
+# var slide_dir := direction
 var active_grapples: Array[Bullet] = []
 var hooked := false
 var interacting_with: Array[Interactable]
@@ -77,12 +88,17 @@ var interacting_with: Array[Interactable]
 @onready var back_wall_checker: RayCast2D = $Graphics/BackWallChecker
 @onready var state_machine: StateMachine = $StateMachine
 @onready var input_buffer: InputBuffer = $InputBuffer
-@onready var stats: Stats = $Stats
+@onready var stats: Stats = Game.player_stats
 @onready var shooter: Shooter = $Shooter
 @onready var wave: Sprite2D = $Wave
 @onready var hitbox: Hitbox = $Graphics/Hitbox
 @onready var interaction_action: AnimatedSprite2D = $InteractionAction
 
+
+@export_category("bullets")
+@export var b_LASER: PackedScene = preload("res://bullets/laser.tscn")
+@export var b_ARROW: PackedScene = preload("res://bullets/arrow.tscn")
+@export var b_GRAPPLING_HOOK: PackedScene = preload("res://bullets/grapple.tscn")
 
 '''
 主要逻辑
@@ -111,15 +127,15 @@ func tick_physics(state:State, delta: float) -> void:
 
 	if not get_tree().get_nodes_in_group("Enemy").is_empty():
 		aimdir = get_tree().get_nodes_in_group("Enemy").pick_random().global_position-global_position
-	else: aimdir = Vector2.RIGHT if graphics.scale.x > 0 else Vector2.LEFT
+	else: aimdir = Vector2.RIGHT if direction > 0 else Vector2.LEFT
 	if invincible_timer.time_left > 0:
 		graphics.modulate.a = 0.5 * sin(Time.get_ticks_msec()) + 0.5
 	else:
 		graphics.modulate.a = 1
-	if not state_machine.state in INACTIVE_STATES:
-		direction = Input.get_axis("move_left", "move_right")
-	if not is_zero_approx(direction):
-		graphics.scale.x = -1 if direction<0 else 1
+	# if not state_machine.current_state in INACTIVE_STATES:
+	# 	direction = Input.get_axis("move_left", "move_right")
+	# if not is_zero_approx(direction):
+	# 	graphics.scale.x = -1 if direction<0 else 1
 
 
 	match state:
@@ -146,7 +162,7 @@ func tick_physics(state:State, delta: float) -> void:
 		
 		State.WALL_SLIDING:
 			move(default_gravity/4, delta, Vector2(velocity.x, velocity.y /10)  if is_first_tick else Vector2.INF)
-			graphics.scale.x = wall_normal().x
+			direction = wall_normal().x
 		
 		State.WALL_JUMP:
 			if state_machine.state_time < 0.1:
@@ -343,8 +359,8 @@ func transition_state(from: State, to: State) -> void:
 			#shooter.shoot(shooter.PARTTERN.BULLET, Bullet.BASIC_TYPE.SLASH, 1, Vector2(graphics.scale.x, 0), 0, 1, 1, 1, position+Vector2(graphics.scale.x*48, -18), false, null, Vector2(2, -1.5))
 			is_combo_requested = false
 			attack_request_timer.stop()
-			position.x += graphics.scale.x * 5
-			hitbox.damage = Damage.new(30, self, 10, 25, Vector2(0, -1) * graphics.scale.x)
+			position.x += direction * 5
+			hitbox.damage = Damage.new(30, self, 10, 25, Vector2(0, -1) * direction).with_name("DP_attack! ")
 		
 		State.ATTACK_COMBO:
 			animation_player.play("attack_combo")
@@ -381,16 +397,17 @@ func transition_state(from: State, to: State) -> void:
 		State.SLIDING_START:
 			animation_player.play("sliding_start")
 			slide_request_timer.stop()
-			slide_dir = direction if not is_zero_approx(direction) else graphics.scale.x
+			# slide_dir = direction if not is_zero_approx(direction) else graphics.scale.x
 			stats.energy -= SLIDING_ENERGY
-			hitbox.damage = Damage.new(4, self, 1, 50, graphics.scale.x * Vector2.RIGHT)
+			hitbox.damage = Damage.new(4, self, 1, 15, direction * Vector2.RIGHT).with_name("sliding_start")
 		
 		State.SLIDING_LOOP:
 			animation_player.play("sliding_loop")
-			hitbox.damage = Damage.new(3, self, 1, 50, graphics.scale.x * Vector2.RIGHT)
+			hitbox.damage = Damage.new(3, self, 1, 15, direction * Vector2.RIGHT).with_name("sliding_loop")
 		
 		State.SLIDING_END:
 			animation_player.play("sliding_end")
+			hitbox.damage = null
 		
 		_:
 			push_warning("transition_state State Error: State ", to)
@@ -502,7 +519,7 @@ func _check_range_attack_input() -> bool:
 func _fire_charge_shot():
 	shooter.shoot(
 		# shooter.shooter_config(load("res://bullets/lightning.tscn"), get_global_mouse_position()),
-		shooter.shooter_config(load("res://bullets/laser.tscn"), position + Vector2(graphics.scale.x * 16, -32), get_local_mouse_position()).with_custom_config_before_ready(func(b):
+		shooter.shooter_config(b_LASER, position + Vector2(direction * 16, -32), get_local_mouse_position()).with_custom_config_before_ready(func(b):
 		b.owner_node = self
 		# b.initial_position == position + Vector2(graphics.scale.x * 16, -32) # 子弹位置在人物前方
 		b.base_position = Vector2.ZERO # 激光射出点在鼠标位置
@@ -514,7 +531,7 @@ func _fire_charge_shot():
 
 func _fire_quick_shot():
 	shooter.shoot(
-		shooter.shooter_config(load("res://bullets/arrow.tscn"), position + Vector2(0, -32), get_local_mouse_position() - Vector2(0, -32))
+		shooter.shooter_config(b_ARROW, position + Vector2(0, -32), get_local_mouse_position() - Vector2(0, -32))
 			.with_speed(350)
 			.with_custom_config(func(b):
 			b.gravity_velocity = Vector2.DOWN
@@ -525,15 +542,15 @@ func _fire_quick_shot():
 
 func _check_dp_command() -> bool:
 	return input_buffer.check_command([
-		Vector2(graphics.scale.x, 0),
+		Vector2(direction, 0),
 		Vector2.DOWN,
-		Vector2(graphics.scale.x, 0) + Vector2.DOWN,
+		Vector2(direction, 0) + Vector2.DOWN,
 		{"button": "Range", "min_duration": 0.01}
 	])# and Input.is_action_just_pressed("Attack")
 
 func _check_slide_command() -> bool:
 	return input_buffer.check_command([
-		Vector2(graphics.scale.x, 0) + Vector2.DOWN,
+		Vector2(direction, 0) + Vector2.DOWN,
 		{"button": "slide", "min_duration": 0.1}
 	]) and stats.energy - SLIDING_ENERGY > 0
 
@@ -559,7 +576,7 @@ func _check_grapple_limit():
 
 func _fire_grapple():
 	var hook_config = shooter.shooter_config(
-		load("res://bullets/grapple.tscn"),
+		b_GRAPPLING_HOOK,
 		position + Vector2(0, -16),  # 发射位置偏移
 		get_local_mouse_position() - Vector2(0, -32)  # 发射方向
 	).with_speed(600).with_custom_config(func(b):
@@ -608,13 +625,14 @@ func can_wall_slide() -> bool:
 '''
 func move(gravity:float, delta: float, VELinput: Vector2 = Vector2.INF) -> void:#此处可以enum MoveMode后把Movemode也作为参数传入来代替is_finite的判断，扩展性更强 
 	# var direction := Input.get_axis("move_left", "move_right")
+	var movement_dir := Input.get_axis("move_left", "move_right")
 	var acceleration := FLOOR_ACCELERATION if is_on_floor() else (AIR_ACCELERATION if not hooked else SWING_ACCELERATION)
-	velocity.x = move_toward(velocity.x, direction * RUN_SPEED, acceleration * delta)
+	velocity.x = move_toward(velocity.x, movement_dir * RUN_SPEED, acceleration * delta)
 	velocity.y += gravity * delta
 	if VELinput.is_finite(): 
 		velocity = VELinput
-	# if not is_zero_approx(direction):
-	# 	graphics.scale.x = -1 if direction<0 else 1
+	if not is_zero_approx(movement_dir):
+		direction = Direction.LEFT if movement_dir<0 else Direction.RIGHT
 	move_and_slide()
 func die() -> void:
 	get_tree().reload_current_scene()
@@ -624,7 +642,8 @@ func stand(gravity: float, delta: float) -> void:
 	velocity.y += gravity * delta
 	move_and_slide()
 func slide(delta : float) -> void:
-	velocity.x = slide_dir * SLIDING_SPEED
+	# velocity.x = slide_dir * SLIDING_SPEED
+	velocity.x = direction * SLIDING_SPEED
 	velocity.y += default_gravity * delta
 	move_and_slide()
 func hitstop(type: int = 0, time: float = 0.05, time_scale: float = 0.05):
@@ -642,7 +661,7 @@ func hitstop(type: int = 0, time: float = 0.05, time_scale: float = 0.05):
 		await sctw.finished
 		wave.scale = Vector2.ZERO
 func register_interactable(interactable: Interactable) -> void:
-	if state_machine.state in INACTIVE_STATES:
+	if state_machine.current_state in INACTIVE_STATES:
 		return
 	if interacting_with.has(interactable):
 		return

@@ -7,7 +7,7 @@ var stopped: bool = false
 func _ready() -> void:
 	super._ready()
 	# position = init_position
-	type = BASIC_TYPE.ARROW
+	type = "ARROW"
 	life = 2
 	damage = 12
 	damage_interval = 50

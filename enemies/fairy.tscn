@@ -3,8 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://dkeddtpeslppy" path="res://enemies/enemy.tscn" id="1_bcbrj"]
 [ext_resource type="Script" path="res://enemies/fairy.gd" id="2_3iqlv"]
 [ext_resource type="PackedScene" uid="uid://joiod8ext8mx" path="res://bullets/star.tscn" id="3_wpxv7"]
-[ext_resource type="Script" path="res://Shooter.gd" id="4_ay2ru"]
-[ext_resource type="Texture2D" uid="uid://du52xjnvom7o5" path="res://fairy1.png" id="4_sc26u"]
+[ext_resource type="Script" path="res://classes/Shooter.gd" id="4_ay2ru"]
+[ext_resource type="Texture2D" uid="uid://du52xjnvom7o5" path="res://assets/fairy1.png" id="4_sc26u"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c2hob"]
 size = Vector2(60, 60)

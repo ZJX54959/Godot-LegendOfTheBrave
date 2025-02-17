@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://d07c41tgg6nxv"]
 
-[ext_resource type="PackedScene" uid="uid://cev6awq0xpyr5" path="res://bullet.tscn" id="1_pq3sx"]
+[ext_resource type="PackedScene" uid="uid://cev6awq0xpyr5" path="res://objects/bullet.tscn" id="1_pq3sx"]
 [ext_resource type="Script" path="res://bullets/grapple.gd" id="2_57po5"]
-[ext_resource type="Texture2D" uid="uid://bs7ie3xrgboet" path="res://2085.png" id="3_dsfxp"]
+[ext_resource type="Texture2D" uid="uid://bs7ie3xrgboet" path="res://assets/2085.png" id="3_dsfxp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_44b5p"]
 resource_local_to_scene = true

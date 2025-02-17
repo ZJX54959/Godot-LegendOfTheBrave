@@ -15,9 +15,13 @@ warnings/check_invalid_track_paths=false
 [application]
 
 config/name="Tutor - Legend of the brave"
-run/main_scene="res://world.tscn"
+run/main_scene="res://worlds/world.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://assets/icon.svg"
+
+[autoload]
+
+Game="*res://globals/game.tscn"
 
 [display]
 

@@ -1,17 +1,16 @@
-[gd_scene load_steps=42 format=3 uid="uid://dcdp33xyad87i"]
+[gd_scene load_steps=41 format=3 uid="uid://dcdp33xyad87i"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_joxv1"]
-[ext_resource type="Texture2D" uid="uid://cvibtd8t60wpa" path="res://generic_char_v0.2/png/blue/char_blue_1.png" id="1_vvk04"]
-[ext_resource type="Texture2D" uid="uid://cu1mjwmcg2hxk" path="res://generic_char_v0.2/png/blue/char_blue_2.png" id="2_sxvrv"]
+[ext_resource type="Texture2D" uid="uid://cvibtd8t60wpa" path="res://assets/generic_char_v0.2/png/blue/char_blue_1.png" id="1_vvk04"]
+[ext_resource type="Texture2D" uid="uid://cu1mjwmcg2hxk" path="res://assets/generic_char_v0.2/png/blue/char_blue_2.png" id="2_sxvrv"]
 [ext_resource type="Script" path="res://classes/Hurtbox.gd" id="3_cwcpf"]
 [ext_resource type="Script" path="res://classes/state_machine.gd" id="3_d78g3"]
 [ext_resource type="Script" path="res://classes/Hitbox.gd" id="4_husve"]
 [ext_resource type="Shader" path="res://ui/noise.gdshader" id="5_xlqv6"]
-[ext_resource type="Script" path="res://classes/Stats.gd" id="7_huvp3"]
 [ext_resource type="PackedScene" uid="uid://jvwvpr6230p" path="res://ui/status_panel.tscn" id="8_addvl"]
-[ext_resource type="Script" path="res://Shooter.gd" id="9_gjvhq"]
+[ext_resource type="Script" path="res://classes/Shooter.gd" id="9_gjvhq"]
 [ext_resource type="Script" path="res://classes/input_buffer.gd" id="9_h61ds"]
-[ext_resource type="Texture2D" uid="uid://fuvwjlj10u34" path="res://gdb-gamepad/gdb-keyboard-2.png" id="12_rkrl6"]
+[ext_resource type="Texture2D" uid="uid://fuvwjlj10u34" path="res://assets/gdb-gamepad/gdb-keyboard-2.png" id="12_rkrl6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_egyok"]
 size = Vector2(8.5, 26.5)
@@ -3356,9 +3355,6 @@ one_shot = true
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("3_d78g3")
 
-[node name="Stats" type="Node" parent="."]
-script = ExtResource("7_huvp3")
-
 [node name="InputBuffer" type="Node" parent="."]
 script = ExtResource("9_h61ds")
 
@@ -3367,18 +3363,17 @@ script = ExtResource("9_gjvhq")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="StatusPanel" parent="CanvasLayer" node_paths=PackedStringArray("stats") instance=ExtResource("8_addvl")]
+[node name="StatusPanel" parent="CanvasLayer" instance=ExtResource("8_addvl")]
 offset_left = 10.0
 offset_top = 12.0
 offset_right = 98.0
 offset_bottom = 38.0
-stats = NodePath("../../Stats")
 
 [node name="InteractionAction" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -48)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_ox1lc")
 autoplay = "default"
-frame_progress = 0.267978
+frame_progress = 0.624832
 
 [connection signal="hurt" from="Graphics/Hurtbox" to="." method="_on_hurtbox_hurt"]

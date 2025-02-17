@@ -33,7 +33,7 @@ func _ready():
 	line.width = 1.0
 	line.default_color = Color.BLUE_VIOLET
 	get_parent().add_child(line)
-	allocate_tex(load("res://2085.png"))
+	allocate_tex(load("res://assets/2085.png"))
 	
 	# 设置碰撞检测
 	#collision_mask = 2  # 只检测地形层

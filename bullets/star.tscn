@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://joiod8ext8mx"]
 
-[ext_resource type="PackedScene" uid="uid://cev6awq0xpyr5" path="res://bullet.tscn" id="1_mqlgy"]
-[ext_resource type="Texture2D" uid="uid://cyawxfw5vdrs6" path="res://Star1.png" id="2_1h8kd"]
+[ext_resource type="PackedScene" uid="uid://cev6awq0xpyr5" path="res://objects/bullet.tscn" id="1_mqlgy"]
+[ext_resource type="Texture2D" uid="uid://cyawxfw5vdrs6" path="res://assets/Star1.png" id="2_1h8kd"]
 [ext_resource type="Script" path="res://bullets/star.gd" id="2_xr66v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tq4m8"]

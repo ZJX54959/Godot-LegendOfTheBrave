@@ -1,6 +1,7 @@
 class_name Damage
 extends RefCounted
 
+var name: String
 var amount: float
 var inv_frame: int
 var source: Node2D
@@ -27,3 +28,7 @@ func _init(
 	else:
 		inv_frame = -1
 	
+
+func with_name(wrd: String) -> Damage:
+	name = wrd
+	return self

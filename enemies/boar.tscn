@@ -2,10 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://dkeddtpeslppy" path="res://enemies/enemy.tscn" id="1_uh7nm"]
 [ext_resource type="Script" path="res://enemies/boar.gd" id="2_rkgqf"]
-[ext_resource type="Texture2D" uid="uid://b2dov7wregi0j" path="res://Legacy-Fantasy - High Forest 2.3/Mob/Boar/Idle/Idle-Sheet.png" id="2_uofd4"]
-[ext_resource type="Texture2D" uid="uid://dmgl8k6wq70pa" path="res://Legacy-Fantasy - High Forest 2.3/Mob/Boar/Hit-Vanish/Hit-Sheet.png" id="3_bvfjs"]
-[ext_resource type="Texture2D" uid="uid://b2o4wrtft2eji" path="res://Legacy-Fantasy - High Forest 2.3/Mob/Boar/Run/Run-Sheet.png" id="4_yt4jn"]
-[ext_resource type="Texture2D" uid="uid://du0f6xyae2vui" path="res://Legacy-Fantasy - High Forest 2.3/Mob/Boar/Walk/Walk-Base-Sheet.png" id="5_u0j4o"]
+[ext_resource type="Texture2D" uid="uid://b2dov7wregi0j" path="res://assets/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Idle/Idle-Sheet.png" id="2_uofd4"]
+[ext_resource type="Texture2D" uid="uid://dmgl8k6wq70pa" path="res://assets/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Hit-Vanish/Hit-Sheet.png" id="3_bvfjs"]
+[ext_resource type="Texture2D" uid="uid://b2o4wrtft2eji" path="res://assets/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Run/Run-Sheet.png" id="4_yt4jn"]
+[ext_resource type="Texture2D" uid="uid://du0f6xyae2vui" path="res://assets/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Walk/Walk-Base-Sheet.png" id="5_u0j4o"]
 [ext_resource type="PackedScene" uid="uid://jvwvpr6230p" path="res://ui/status_panel.tscn" id="7_jas2r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kudea"]
