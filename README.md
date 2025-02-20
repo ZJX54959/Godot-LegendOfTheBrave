@@ -14,7 +14,9 @@
 
   - **远程攻击实现**。[按<kbd>K/鼠标右键</kbd>射击] 分别实现了bullet类和shooter类。 bullet类下创建了四个继承场景```arrow```、```lightning```、```grapple```、```laser```。分别对应箭矢（有初速受重力影响）、闪电（纯播放动画）、钩爪、激光，实现方式各不相同，私以为是很好的bullet类使用方式示例。shooter为发射子弹的类，实现了子弹的创建与发射。外部调用可用shooter.shoot_config()完成发射子弹的配置，并调用shooter.shoot()完成子弹的创建与发射。
 
-  - **InteractiveGrass实现**。实现了草地与人物的交互。来自[BV1uEr1YXE9t](https://www.bilibili.com/video/BV1uEr1YXE9t)搬运By xcount
+  - **InteractiveGrass实现**。实现了草地与人物的交互。来自[BV1uEr1YXE9t](https://www.bilibili.com/video/BV1uEr1YXE9t)搬运By [xcount](https://space.bilibili.com/351607965)
+
+  - **伤害飘字实现**。实现了伤害飘字。来自[BV18pAKeAE5R](https://www.bilibili.com/video/BV18pAKeAE5R)By [无所不能的咲夜](https://space.bilibili.com/2706229)
   
   - **新enemy实现（Fairy）**。实现了敌人的创建与移动。它能发射箭矢（哦对我给箭矢改成别的玩意儿了），还挺萌（猛？）的嘞。*寻路还有点问题*
 
@@ -29,6 +31,8 @@
 ### To-Do list
 
 - 蹲姿、盾姿、蓄力姿等
+
+- 空中攻击
 
 - ~~交互（eps14）~~
 
