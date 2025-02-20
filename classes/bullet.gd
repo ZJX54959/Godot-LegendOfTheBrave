@@ -17,6 +17,11 @@ enum EXPIRE_REASON {
 	LIFE_END,
 	OUTSCREEN,
 	HIT,
+	OUT_OF_RANGE,
+	INVALID_OWNER,
+	EXCEED_LIMIT,
+	ACTIVE_CANCEL, # 主动取消
+	INACTIVE_CANCEL, # 被动取消
 }
 
 
@@ -60,9 +65,14 @@ var cam_rect: Rect2
 
 
 func expired(reason: EXPIRE_REASON = EXPIRE_REASON.NULL, print_reason: bool = true) -> Error:
-	if reason in EXPIRE_REASON and reason >= 0:
+	if reason is EXPIRE_REASON and reason >= 0:
 		if print_reason:
-			print(reason)
+			print("[%s]%s from_%s [%s] expired" % [
+				type, 
+				name, 
+				var_to_str(from_owner.name) if from_owner else "null", 
+				EXPIRE_REASON.keys()[reason + 1],
+				])
 	queue_free()
 	return OK
 
@@ -90,13 +100,13 @@ func expiration_check(delta: float) -> EXPIRE_REASON:
 		life -= delta
 		if life <= 0:
 			life_end.emit()
-			expired(EXPIRE_REASON.LIFE_END)
+			expired(EXPIRE_REASON.LIFE_END, true)
 			return EXPIRE_REASON.LIFE_END
 	if outscreen_expired and is_outscreen():
-		expired(EXPIRE_REASON.OUTSCREEN)
+		expired(EXPIRE_REASON.OUTSCREEN, true)
 		return EXPIRE_REASON.OUTSCREEN
 	if is_hitout():
-		expired(EXPIRE_REASON.HIT)
+		expired(EXPIRE_REASON.HIT, true)
 		return EXPIRE_REASON.HIT
 	return EXPIRE_REASON.NULL
 

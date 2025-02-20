@@ -29,6 +29,7 @@ var line: Line2D
 
 func _ready():
 	super._ready()
+	type = "Grapple"
 	line = Line2D.new()
 	line.width = 1.0
 	line.default_color = Color.BLUE_VIOLET
@@ -46,7 +47,7 @@ func _physics_process(delta):
 	if is_queued_for_deletion():
 		expiring = true
 	if owner_node and not is_instance_valid(owner_node):
-		expired()
+		expired(Bullet.EXPIRE_REASON.INVALID_OWNER, true)
 		return
 	if hooked and is_instance_valid(owner_node):
 		var distance = global_position.distance_to(owner_node.global_position + Vector2(0, -16))
@@ -65,7 +66,7 @@ func _physics_process(delta):
 		# 检测slide按键直接断开
 		if Input.is_action_just_pressed("slide"):
 			owner_node.hooked = false
-			expired()
+			expired(Bullet.EXPIRE_REASON.ACTIVE_CANCEL, true)
 		
 		if Input.is_action_just_pressed("pull"):
 			owner_node.velocity += F(dir, 16) * 3
@@ -81,7 +82,7 @@ func _physics_process(delta):
 			$Particles.emitting = true
 	
 	if owner_node and not expiring and is_instance_valid(owner_node) and global_position.distance_to(owner_node.global_position + Vector2(0, -16)) > max_distance * 1.:
-		expired()
+		expired(Bullet.EXPIRE_REASON.OUT_OF_RANGE, true)
 
 # func _on_hitbox_hit(hurtbox):
 # 	if not hooked and (hurtbox.collision_layer == 1 or true):  # 碰撞到地形
@@ -164,13 +165,13 @@ func expired(_reason: Bullet.EXPIRE_REASON = Bullet.EXPIRE_REASON.NULL, _print_r
 	call_deferred("free")
 
 func exceed_max_capacity():
-	print("exceed_max_capacity")
+	# print("exceed_max_capacity")
 	# var break_particles = $Particles.duplicate()
 	# break_particles.emitting = true
 	# break_particles.global_position = global_position
 	# add_child(break_particles)
 	# break_particles.finished.connect(break_particles.queue_free)
-	expired()
+	expired(Bullet.EXPIRE_REASON.EXCEED_LIMIT, true)
 	# for child in get_children():
 	# 	child.free()
 	# free()

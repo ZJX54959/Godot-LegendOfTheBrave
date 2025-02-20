@@ -1,7 +1,7 @@
 class_name Stats
 extends Node
 
-signal health_changed
+signal health_changed(value: int)
 signal energy_changed
 
 @export var max_health: int = 30
@@ -13,16 +13,16 @@ signal energy_changed
 		v = clampi(v, 0, max_health)
 		if health == v:
 			return
+		health_changed.emit(v - health)
 		health = v
-		health_changed.emit()
 
 @onready var energy : float = max_energy:
 	set(v):
 		v = clampf(v, 0, max_energy)
 		if energy == v:
 			return
-		energy = v
 		energy_changed.emit()
+		energy = v
 
 func _process(delta: float) -> void:
 	energy += energy_regen * delta

@@ -29,25 +29,25 @@ layer_1/tile_data = PackedInt32Array(786433, 327680, 2, 720897, 327680, 1, 65536
 layer_2/name = "Foreground"
 layer_2/tile_data = PackedInt32Array(720898, 589824, 3, 720899, 589824, 2, 720901, 589824, 3, 720902, 524288, 3, 720906, 589824, 2, 655371, 589824, 2, 655373, 458752, 3, 655377, 524288, 3, 655381, 655360, 2, 655382, 655360, 2, 655383, 589824, 3, 655386, 393216, 3, 589853, 524288, 2, 589857, 524288, 2, 589858, 524288, 2, 589859, 458752, 3, 589863, 589824, 3, 589870, 589824, 2, 589875, 655360, 2, 524341, 524288, 2, 524344, 524288, 2, 524346, 524288, 2, 524347, 458752, 3, 524348, 589824, 2, 41, 393216, 3, 37, 655360, 2, 36, 589824, 2, 30, 524288, 2, 131137, 655360, 5, 131138, 589824, 4, 196675, 720896, 7, 131139, 720896, 7, 65603, 720896, 6, 65602, 655360, 6, 196673, 720896, 8, 196672, 589824, 8, 131136, 589824, 6, 65601, 589824, 6, -524217, 589824, 6, -458681, 655360, 5, -393145, 655360, 7, -327609, 655360, 4, -262073, 589824, 8, -262072, 655360, 8, -262071, 720896, 8, -327607, 589824, 4, -327606, 720896, 8, -393142, 720896, 6, -393143, 589824, 5, -458679, 720896, 6, -458680, 589824, 5, -393144, 720896, 4, -327608, 655360, 7, -458682, 589824, 6, -393146, 589824, 7, -327610, 589824, 8, -982974, 655360, 6, -917438, 720896, 4, -851902, 655360, 4, -786366, 589824, 8, -982973, 720896, 6, -917437, 720896, 7, -851901, 720896, 7, -851903, 589824, 8, -917439, 589824, 7, -982975, 589824, 6, -786365, 720896, 8)
 
-[node name="MineGate" parent="TileMap" instance=ExtResource("3_5yc1p")]
+[node name="MineGateUp" parent="TileMap" instance=ExtResource("3_5yc1p")]
 position = Vector2(19, -257)
 scale = Vector2(-1, 1)
 target_scene = "res://worlds/playground.tscn"
-entry_point = "EntryPoint2"
+entry_point = "EntryPoint"
 
-[node name="MineGate2" parent="TileMap" instance=ExtResource("3_5yc1p")]
+[node name="MineGateBottom" parent="TileMap" instance=ExtResource("3_5yc1p")]
 position = Vector2(36, 191)
 scale = Vector2(-1, 1)
 target_scene = "res://worlds/world.tscn"
-entry_point = "EntryPoint"
+entry_point = "EntryPointUp"
 
-[node name="EntryPoint" type="Marker2D" parent="TileMap"]
+[node name="EntryPointUp" type="Marker2D" parent="TileMap"]
 position = Vector2(96, -256)
 gizmo_extents = 50.0
 script = ExtResource("4_ju3x5")
 direction = -1
 
-[node name="EntryPoint2" type="Marker2D" parent="TileMap"]
+[node name="EntryPointBottom" type="Marker2D" parent="TileMap"]
 position = Vector2(120, 192)
 gizmo_extents = 50.0
 script = ExtResource("4_ju3x5")

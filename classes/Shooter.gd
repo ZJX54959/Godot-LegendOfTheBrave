@@ -16,7 +16,7 @@ enum SHOOT_PATTERN {
 
 # 发射模式接口
 class ShootingPattern:
-	func execute(shooter: Shooter, config: ShootConfig): pass
+	func execute(_shooter: Shooter, _config: ShootConfig): pass
 
 # 基础发射配置
 class ShootConfig:
@@ -175,7 +175,26 @@ func _create_bullet(config: ShootConfig) -> Bullet:
 	if config.custom_config_before_ready.is_valid():
 		config.custom_config_before_ready.call(bullet)
 
-	get_tree().root.add_child(bullet)
+	# 寻找或创建bullets节点
+	var bullets_node: Node2D
+	if owner and owner.get_parent():
+		# 检查shooter父节点同级是否有bullets节点
+		bullets_node = owner.get_parent().get_node_or_null("bullets")
+		if not bullets_node:
+			# 创建bullets节点
+			bullets_node = Node2D.new()
+			bullets_node.name = "bullets"
+			owner.get_parent().add_child(bullets_node)
+	else:
+		# 如果shooter没有owner或owner没有父节点，则在场景树根下查找或创建bullets节点
+		bullets_node = get_tree().root.get_node_or_null("bullets")
+		if not bullets_node:
+			bullets_node = Node2D.new()
+			bullets_node.name = "bullets"
+			get_tree().root.add_child(bullets_node)
+	
+	# 将子弹添加到bullets节点下
+	bullets_node.add_child(bullet)
 
 	# 应用自定义配置
 	if config.custom_config.is_valid():

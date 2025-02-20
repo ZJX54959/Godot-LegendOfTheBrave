@@ -33,6 +33,7 @@ var is_invincible := false
 
 func _ready() -> void:
 	add_to_group("Enemy")
+	stats.health_changed.connect(on_health_changed)
 	# print(collision_layer)
 
 
@@ -96,3 +97,6 @@ func hitstop(type: int = 0, time: float = 0.03):
 		Engine.time_scale = .05
 		await get_tree().create_timer(0.5, true, false, true).timeout
 		Engine.time_scale = 1
+
+func on_health_changed(health_change: int) -> void:
+	add_sibling(HitLabel.new(health_change).set_bias_position(position))

@@ -6,4 +6,5 @@ func _ready() -> void:
 	damage = 4
 	damage_interval = 6
 	gravity = false
+	type = "star"
 	animation_player.play("star")

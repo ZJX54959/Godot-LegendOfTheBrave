@@ -34,9 +34,13 @@ const ATTACK_STATES := [
 	State.ATTACK_1, State.ATTACK_2, State.ATTACK_3
 ]
 const INACTIVE_STATES := [
-	# State.
+	# 不可操作的状态
 	State.SLIDING_START, State.SLIDING_LOOP, State.SLIDING_END,
 	State.HURT, State.DYING
+]
+const ANTI_KNOCKBACK_STATES := [
+	# 不受到击退的状态\霸体状态
+	State.ATTACK_3
 ]
 const RUN_SPEED := 160.0
 const JUMP_VELOCITY := -320.0
@@ -51,8 +55,10 @@ const SLIDING_SPEED := 256.0
 const SLIDING_ENERGY := 4.0
 const LANDING_HEIGHT := 100.0
 const MAX_GRAPPLES = 3
+const MAX_HEALTH := 100
 
 @export var can_combo := false
+@export var can_cancel := false # <-- Todo
 @export var direction := Direction.RIGHT:
 	set(v):
 		direction = v
@@ -195,7 +201,9 @@ func get_next_state(state: State) -> int:
 		return State.DYING if not state == State.DYING else state_machine.KEEP_CURRENT
 	
 	if not pending_damages.is_empty():
-		return State.HURT
+		handle_damage(state in ANTI_KNOCKBACK_STATES)
+		if not state in ANTI_KNOCKBACK_STATES:
+			return State.HURT
 	
 	var input := _get_current_input_state()
 	var is_still: bool = Input.get_axis("move_left", "move_right") == 0
@@ -370,22 +378,23 @@ func transition_state(from: State, to: State) -> void:
 		
 		State.HURT:
 			animation_player.play("hurt")
-			hitstop()
+			# --> handle_damage()
+			# hitstop()
 			
-			var total_knockback := Vector2.ZERO
-			var total_damage := 0.0
-			for dmg in pending_damages:
-				total_damage += dmg.amount
-				# 计算每个伤害源的击退向量
-				var dir = dmg.knockback_dir if not dmg.knockback_dir.is_zero_approx() else \
-					(global_position - dmg.source.global_position).normalized()
-				total_knockback += dir * dmg.knockback_force
+			# var total_knockback := Vector2.ZERO
+			# var total_damage := 0.0
+			# for dmg in pending_damages:
+			# 	total_damage += dmg.amount
+			# 	# 计算每个伤害源的击退向量
+			# 	var dir = dmg.knockback_dir if not dmg.knockback_dir.is_zero_approx() else \
+			# 		(global_position - dmg.source.global_position).normalized()
+			# 	total_knockback += dir * dmg.knockback_force
 			
-			stats.health -= int(total_damage)
-			velocity = total_knockback * KNOCKBACK_AMOUNT
-			pending_damages.clear()
+			# stats.health -= int(total_damage)
+			# velocity = total_knockback * KNOCKBACK_AMOUNT
+			# pending_damages.clear()
 			
-			invincible_timer.start()
+			# invincible_timer.start()
 			graphics.modulate.s = 1
 		
 		State.DYING:
@@ -635,7 +644,10 @@ func move(gravity:float, delta: float, VELinput: Vector2 = Vector2.INF) -> void:
 		direction = Direction.LEFT if movement_dir<0 else Direction.RIGHT
 	move_and_slide()
 func die() -> void:
-	get_tree().reload_current_scene()
+	var tree := get_tree()
+	tree.reload_current_scene()
+	# await tree.tree_changed
+	# Game.player_stats.health = MAX_HEALTH
 func stand(gravity: float, delta: float) -> void:
 	var acceleration := FLOOR_ACCELERATION if is_on_floor() else AIR_ACCELERATION
 	velocity.x = move_toward(velocity.x, 0.0, acceleration * delta)
@@ -670,3 +682,20 @@ func register_interactable(interactable: Interactable) -> void:
 func unregister_interactable(interactable: Interactable) -> void:
 	interacting_with.erase(interactable)
 	interaction_action.visible = interacting_with.size() > 0
+func handle_damage(hit_stun:int = 0) -> void:
+	hitstop(0, hit_stun/10.)
+			
+	var total_knockback := Vector2.ZERO
+	var total_damage := 0.0
+	for dmg in pending_damages:
+		total_damage += dmg.amount
+		# 计算每个伤害源的击退向量
+		var dir = dmg.knockback_dir if not dmg.knockback_dir.is_zero_approx() else \
+			(global_position - dmg.source.global_position).normalized()
+		total_knockback += dir * dmg.knockback_force
+	
+	stats.health -= int(total_damage)
+	velocity = total_knockback * KNOCKBACK_AMOUNT
+	pending_damages.clear()
+	
+	invincible_timer.start()
