@@ -1,15 +1,15 @@
 [gd_scene load_steps=41 format=3 uid="uid://dcdp33xyad87i"]
 
-[ext_resource type="Script" path="res://player.gd" id="1_joxv1"]
+[ext_resource type="Script" uid="uid://bjewmlcjkla86" path="res://player.gd" id="1_joxv1"]
 [ext_resource type="Texture2D" uid="uid://cvibtd8t60wpa" path="res://assets/generic_char_v0.2/png/blue/char_blue_1.png" id="1_vvk04"]
 [ext_resource type="Texture2D" uid="uid://cu1mjwmcg2hxk" path="res://assets/generic_char_v0.2/png/blue/char_blue_2.png" id="2_sxvrv"]
-[ext_resource type="Script" path="res://classes/Hurtbox.gd" id="3_cwcpf"]
-[ext_resource type="Script" path="res://classes/state_machine.gd" id="3_d78g3"]
-[ext_resource type="Script" path="res://classes/Hitbox.gd" id="4_husve"]
-[ext_resource type="Shader" path="res://ui/noise.gdshader" id="5_xlqv6"]
+[ext_resource type="Script" uid="uid://cg4ju1ekaw562" path="res://classes/Hurtbox.gd" id="3_cwcpf"]
+[ext_resource type="Script" uid="uid://ct4x70btwwnby" path="res://classes/state_machine.gd" id="3_d78g3"]
+[ext_resource type="Script" uid="uid://ps3sd84fqsi" path="res://classes/Hitbox.gd" id="4_husve"]
+[ext_resource type="Shader" uid="uid://b12hrqgqd3qc0" path="res://ui/noise.gdshader" id="5_xlqv6"]
 [ext_resource type="PackedScene" uid="uid://jvwvpr6230p" path="res://ui/status_panel.tscn" id="8_addvl"]
-[ext_resource type="Script" path="res://classes/Shooter.gd" id="9_gjvhq"]
-[ext_resource type="Script" path="res://classes/input_buffer.gd" id="9_h61ds"]
+[ext_resource type="Script" uid="uid://53p4jrpv8dxo" path="res://classes/Shooter.gd" id="9_gjvhq"]
+[ext_resource type="Script" uid="uid://b33wbjdnejabb" path="res://classes/input_buffer.gd" id="9_h61ds"]
 [ext_resource type="Texture2D" uid="uid://fuvwjlj10u34" path="res://assets/gdb-gamepad/gdb-keyboard-2.png" id="12_rkrl6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_egyok"]
@@ -3208,22 +3208,22 @@ tracks/15/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_712b7"]
 _data = {
-"RESET": SubResource("Animation_t1f40"),
-"attack_1": SubResource("Animation_4i00o"),
-"attack_2": SubResource("Animation_bo66w"),
-"attack_3": SubResource("Animation_xco0s"),
-"attack_combo": SubResource("Animation_v3ana"),
-"die": SubResource("Animation_s7gbx"),
-"falling": SubResource("Animation_xjwuw"),
-"hurt": SubResource("Animation_5bmik"),
-"idle": SubResource("Animation_8mflr"),
-"jump": SubResource("Animation_7qk4n"),
-"landing": SubResource("Animation_3f4w1"),
-"running": SubResource("Animation_p56my"),
-"sliding_end": SubResource("Animation_knd2e"),
-"sliding_loop": SubResource("Animation_yjodp"),
-"sliding_start": SubResource("Animation_q77ok"),
-"wall_sliding": SubResource("Animation_ffbw6")
+&"RESET": SubResource("Animation_t1f40"),
+&"attack_1": SubResource("Animation_4i00o"),
+&"attack_2": SubResource("Animation_bo66w"),
+&"attack_3": SubResource("Animation_xco0s"),
+&"attack_combo": SubResource("Animation_v3ana"),
+&"die": SubResource("Animation_s7gbx"),
+&"falling": SubResource("Animation_xjwuw"),
+&"hurt": SubResource("Animation_5bmik"),
+&"idle": SubResource("Animation_8mflr"),
+&"jump": SubResource("Animation_7qk4n"),
+&"landing": SubResource("Animation_3f4w1"),
+&"running": SubResource("Animation_p56my"),
+&"sliding_end": SubResource("Animation_knd2e"),
+&"sliding_loop": SubResource("Animation_yjodp"),
+&"sliding_start": SubResource("Animation_q77ok"),
+&"wall_sliding": SubResource("Animation_ffbw6")
 }
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1mywb"]
@@ -3325,7 +3325,7 @@ debug_color = Color(0.7, 0.583333, 0, 0.419608)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_712b7")
+&"": SubResource("AnimationLibrary_712b7")
 }
 
 [node name="CoyoteTimer" type="Timer" parent="."]

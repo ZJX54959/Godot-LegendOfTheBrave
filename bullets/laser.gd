@@ -40,10 +40,10 @@ func _ready() -> void:
 	# segment_texture = allocate_tex(load("res://laser1.png"))
 	outlook.hide()
 	collision_shape.disabled = true
-	hitpoint = 128
+	hitpoint = 8
 	damage = 1
 	damage_interval = 4
-	knockback_force = 15
+	knockback_force = 5
 	from_owner = owner_node
 	laser_hitbox.hit.connect(_on_hitbox_hit)
 	set_direction(direction)
@@ -84,6 +84,9 @@ func expired(reason: EXPIRE_REASON = EXPIRE_REASON.NULL, print_reason: bool = tr
 	# 渐隐动画
 	# var tween = create_tween()
 	# await tween.tween_property(self, "modulate:a", 0.0, fade_out_duration).finished
+	laser_hitbox.damage = null
+	laser_hitbox.monitorable = false
+	laser_hitbox.monitoring = false
 	await get_tree().create_tween().set_ease(Tween.EASE_OUT).tween_property(bodies, "scale", Vector2(1, 0), fade_out_duration).finished
 	# tween.tween_callback(super.expired.bind(reason, print_reason))
 	super.expired(reason, print_reason)

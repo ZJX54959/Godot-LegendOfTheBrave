@@ -1,9 +1,9 @@
 [gd_scene load_steps=16 format=3 uid="uid://ca2ckfrtb3txc"]
 
 [ext_resource type="PackedScene" uid="uid://dkeddtpeslppy" path="res://enemies/enemy.tscn" id="1_bcbrj"]
-[ext_resource type="Script" path="res://enemies/fairy.gd" id="2_3iqlv"]
+[ext_resource type="Script" uid="uid://5nruohu5hlw4" path="res://enemies/fairy.gd" id="2_3iqlv"]
 [ext_resource type="PackedScene" uid="uid://joiod8ext8mx" path="res://bullets/star.tscn" id="3_wpxv7"]
-[ext_resource type="Script" path="res://classes/Shooter.gd" id="4_ay2ru"]
+[ext_resource type="Script" uid="uid://53p4jrpv8dxo" path="res://classes/Shooter.gd" id="4_ay2ru"]
 [ext_resource type="Texture2D" uid="uid://du52xjnvom7o5" path="res://assets/fairy1.png" id="4_sc26u"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c2hob"]
@@ -490,12 +490,12 @@ tracks/5/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_17eiw"]
 _data = {
-"RESET": SubResource("Animation_batel"),
-"alert": SubResource("Animation_6x06f"),
-"attack": SubResource("Animation_enmdj"),
-"die": SubResource("Animation_mj53f"),
-"hit": SubResource("Animation_k847i"),
-"hover": SubResource("Animation_ypjj2")
+&"RESET": SubResource("Animation_batel"),
+&"alert": SubResource("Animation_6x06f"),
+&"attack": SubResource("Animation_enmdj"),
+&"die": SubResource("Animation_mj53f"),
+&"hit": SubResource("Animation_k847i"),
+&"hover": SubResource("Animation_ypjj2")
 }
 
 [node name="Fairy" instance=ExtResource("1_bcbrj")]
@@ -536,7 +536,7 @@ shape = SubResource("RectangleShape2D_nnod0")
 
 [node name="AnimationPlayer" parent="." index="2"]
 libraries = {
-"": SubResource("AnimationLibrary_17eiw")
+&"": SubResource("AnimationLibrary_17eiw")
 }
 
 [node name="Shooter" type="Node" parent="." index="5"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://d2r13uki6mxk1"]
 
-[ext_resource type="Script" path="res://classes/Teleporter.gd" id="1_qott4"]
+[ext_resource type="Script" uid="uid://badtkcyfmgwve" path="res://classes/Teleporter.gd" id="1_qott4"]
 [ext_resource type="Texture2D" uid="uid://dhx45jqc2ay7x" path="res://assets/Legacy-Fantasy - High Forest 2.3/Assets/Buildings.png" id="2_ylg86"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t3ds0"]

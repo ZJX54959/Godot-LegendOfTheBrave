@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://ltb88u1tvbta"]
 
-[ext_resource type="Script" path="res://objects/interactive_grass/interactive_grass.gd" id="1_7vyg2"]
-[ext_resource type="Shader" path="res://objects/interactive_grass/interactive_grass.gdshader" id="1_011p6"]
+[ext_resource type="Script" uid="uid://yufrxg8myi0y" path="res://objects/interactive_grass/interactive_grass.gd" id="1_7vyg2"]
+[ext_resource type="Shader" uid="uid://dbtwp7ebdymil" path="res://objects/interactive_grass/interactive_grass.gdshader" id="1_011p6"]
 [ext_resource type="Texture2D" uid="uid://cl0uh402cl8cj" path="res://assets/interactive_grass/pink_tulip.png" id="2_fhli1"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_img3d"]
@@ -13,8 +13,8 @@ noise = SubResource("FastNoiseLite_img3d")
 resource_local_to_scene = true
 shader = ExtResource("1_011p6")
 shader_parameter/skew = 0.0
-shader_parameter/wind_speed = 1.0
 shader_parameter/noise_tex = SubResource("NoiseTexture2D_8b0v4")
+shader_parameter/wind_speed = 1.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5cdlu"]
 size = Vector2(11, 15)

@@ -1,6 +1,8 @@
 extends Node2D
 
-@onready var tile_map: TileMap = $TileMap
+#@onready var tile_map: TileMap = $TileMap
+@onready var scene: Node2D = $Scene
+@onready var tile_map: TileMapLayer = $Scene/Geometry
 @onready var camera_2d: Camera2D = $Player/Camera2D
 @onready var boar := preload("res://enemies/boar.tscn")
 @onready var player: Player = $Player

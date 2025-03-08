@@ -2,6 +2,8 @@ class_name HitLabel
 extends Label
 
 
+const THEME = preload("res://assets/theme.tres")
+
 # @onready var label: Label = $Label
 
 var health_change: int
@@ -15,6 +17,7 @@ func _init(hp: int):
 	# else:
 	# 	label.modulate.g = health_change/30.0
 	# get_vars(hp)
+	theme = THEME
 	text = str(hp)
 	if hp < 0:
 		modulate = Color(1, 1 - abs(hp)/30.0, 1 - abs(hp)/30.0, 1)

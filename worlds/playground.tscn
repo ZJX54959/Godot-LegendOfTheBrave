@@ -1,10 +1,10 @@
 [gd_scene load_steps=17 format=3 uid="uid://stvys3o4welc"]
 
-[ext_resource type="Script" path="res://worlds/world.gd" id="1_tseme"]
+[ext_resource type="Script" uid="uid://bm6g1gryhrewx" path="res://worlds/world.gd" id="1_tseme"]
 [ext_resource type="Texture2D" uid="uid://cnpcfn801ya18" path="res://assets/Legacy-Fantasy - High Forest 2.3/Assets/Tree-Assets.png" id="2_k8tvh"]
 [ext_resource type="Texture2D" uid="uid://c54unvwjef0yb" path="res://assets/tile_gd.png" id="3_bgsex"]
 [ext_resource type="PackedScene" uid="uid://d2r13uki6mxk1" path="res://objects/mine_gate.tscn" id="3_yy4hb"]
-[ext_resource type="Script" path="res://classes/EntryPoint.gd" id="4_2rng1"]
+[ext_resource type="Script" uid="uid://d0wvws7y62g1h" path="res://classes/EntryPoint.gd" id="4_2rng1"]
 [ext_resource type="Texture2D" uid="uid://7rgdqhdw072m" path="res://assets/4t4tile.png" id="4_mn6xp"]
 [ext_resource type="PackedScene" uid="uid://dcdp33xyad87i" path="res://player.tscn" id="5_o28j1"]
 [ext_resource type="Texture2D" uid="uid://u310uvsvrh0k" path="res://assets/Legacy-Fantasy - High Forest 2.3/Background/Background.png" id="6_fugto"]

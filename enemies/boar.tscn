@@ -1,7 +1,7 @@
 [gd_scene load_steps=18 format=3 uid="uid://bqqlu53rk6ilm"]
 
 [ext_resource type="PackedScene" uid="uid://dkeddtpeslppy" path="res://enemies/enemy.tscn" id="1_uh7nm"]
-[ext_resource type="Script" path="res://enemies/boar.gd" id="2_rkgqf"]
+[ext_resource type="Script" uid="uid://dj7rtmlm2l1dy" path="res://enemies/boar.gd" id="2_rkgqf"]
 [ext_resource type="Texture2D" uid="uid://b2dov7wregi0j" path="res://assets/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Idle/Idle-Sheet.png" id="2_uofd4"]
 [ext_resource type="Texture2D" uid="uid://dmgl8k6wq70pa" path="res://assets/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Hit-Vanish/Hit-Sheet.png" id="3_bvfjs"]
 [ext_resource type="Texture2D" uid="uid://b2o4wrtft2eji" path="res://assets/Legacy-Fantasy - High Forest 2.3/Mob/Boar/Run/Run-Sheet.png" id="4_yt4jn"]
@@ -496,12 +496,12 @@ tracks/5/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_xxgmr"]
 _data = {
-"RESET": SubResource("Animation_q6oeu"),
-"die": SubResource("Animation_uugbu"),
-"hit": SubResource("Animation_v4712"),
-"idle": SubResource("Animation_a8q2o"),
-"run": SubResource("Animation_162hs"),
-"walk": SubResource("Animation_6wo21")
+&"RESET": SubResource("Animation_q6oeu"),
+&"die": SubResource("Animation_uugbu"),
+&"hit": SubResource("Animation_v4712"),
+&"idle": SubResource("Animation_a8q2o"),
+&"run": SubResource("Animation_162hs"),
+&"walk": SubResource("Animation_6wo21")
 }
 
 [node name="Boar" groups=["Enemy"] instance=ExtResource("1_uh7nm")]
@@ -542,7 +542,7 @@ shape = SubResource("CircleShape2D_rucik")
 
 [node name="AnimationPlayer" parent="." index="2"]
 libraries = {
-"": SubResource("AnimationLibrary_xxgmr")
+&"": SubResource("AnimationLibrary_xxgmr")
 }
 
 [node name="CalmDownTimer" type="Timer" parent="." index="4"]
