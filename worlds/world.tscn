@@ -230,16 +230,16 @@ region_enabled = true
 region_rect = Rect2(210, 197, 124, 86)
 
 [node name="InteractiveGrass" parent="Decorations" instance=ExtResource("6_5ecua")]
-position = Vector2(506, 152)
+position = Vector2(504, 160)
 
 [node name="InteractiveGrass2" parent="Decorations" instance=ExtResource("6_5ecua")]
-position = Vector2(351, 167)
+position = Vector2(352, 176)
 
 [node name="InteractiveGrass3" parent="Decorations" instance=ExtResource("6_5ecua")]
-position = Vector2(525, 152)
+position = Vector2(528, 160)
 
 [node name="InteractiveGrass4" parent="Decorations" instance=ExtResource("6_5ecua")]
-position = Vector2(503, 88)
+position = Vector2(504, 97)
 
 [node name="Boar" parent="." instance=ExtResource("6_45416")]
 position = Vector2(585, -5)

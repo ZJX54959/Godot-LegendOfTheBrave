@@ -1,6 +1,7 @@
 class_name Stats
 extends Node
 
+signal health_will_change(value: int)
 signal health_changed(value: int)
 signal energy_changed
 
@@ -10,6 +11,7 @@ signal energy_changed
 
 @onready var health : int = max_health:
 	set(v):
+		health_will_change.emit(v - health)
 		v = clampi(v, 0, max_health)
 		if health == v:
 			return

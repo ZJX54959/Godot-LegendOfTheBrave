@@ -7,6 +7,8 @@ var inv_frame: int
 var source: Node2D
 var knockback_force: float  # 击退力度
 var knockback_dir: Vector2  # 击退方向（归一化向量）
+var type: String
+var hurt_layer: int
 
 func _init(
 	damage: float, 
@@ -30,5 +32,13 @@ func _init(
 	
 
 func with_name(wrd: String) -> Damage:
-	name = wrd
+	self.name = wrd
+	return self
+
+func with_type(wrd: String) -> Damage:
+	self.type = wrd
+	return self
+
+func with_hurt_layer(wrd: int) -> Damage:
+	self.hurt_layer = wrd
 	return self

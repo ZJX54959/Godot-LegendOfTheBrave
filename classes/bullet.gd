@@ -139,7 +139,12 @@ func _on_hitbox_hit(_hurtbox) -> void:
 
 	# hurtbox.set_deferred("monitoring", false)
 	# hurtbox.owner._on_hurtbox_hurt(hitbox, Damage.new(damage, from_owner if from_owner else self))
-	hitbox.damage = Damage.new(damage, from_owner if from_owner else self, damage_interval, knockback_force, knockback_dir).with_name(type)
+	hitbox.damage = Damage.new(damage, 
+								from_owner if from_owner else self, 
+								damage_interval, 
+								knockback_force, 
+								knockback_dir
+								).with_name(type).with_type("range")
 	hitpoint -= 1
 	# invincibility_frame(hurtbox)
 	

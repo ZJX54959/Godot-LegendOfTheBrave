@@ -32,6 +32,7 @@ class ShootConfig:
 	var knockback_force: float = 0
 	var ways: int = 1
 	var spread_angle: float = 1
+	var interval: float = -1.0
 	var custom_config: Callable = func(_b): pass
 	var custom_config_before_ready: Callable = func(_b): pass
 	func _init(
@@ -60,10 +61,19 @@ class ShootConfig:
 		config.direction = direction
 		config.speed = speed
 		config.life = life
+		config.interval = interval
 		return config
 
 	func with_rotation(angle: float) -> ShootConfig:
 		direction = direction.rotated(angle)
+		return self
+	
+	func with_spread_angle(angle: float) -> ShootConfig:
+		spread_angle = angle
+		return self
+	
+	func with_interval(itv: float) -> ShootConfig:
+		interval = itv
 		return self
 
 	func with_speed(spd: float) -> ShootConfig:

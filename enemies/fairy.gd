@@ -34,11 +34,15 @@ const CHECKER_DISTANCE := 512.0
 	player_checker_3,
 ]
 
-var attack_pattern := Shooter.SHOOT_PATTERN.FLOWER
+var shoot_pattern := Shooter.SHOOT_PATTERN.FLOWER
 var pending_damages: Array[Damage] = []
 var last_known_position: Vector2
 var lost_timer: float = 0.0
 var dir: Vector2 = Vector2.RIGHT
+var attack_pattern: Array[Callable] = [
+	attack_pattern_1,
+	attack_pattern_2,
+]
 
 
 
@@ -46,7 +50,7 @@ func _ready() -> void:
 	super._ready()
 	attack_timer.start(randf_range(1.5, 3.0))
 	# motion_mode = MotionMode.MOTION_MODE_FLOATING
-	knockback_amount = 2000
+	knockback_amount = 20
 
 func tick_physics(state: State, delta: float) -> void:
 
@@ -178,24 +182,7 @@ func transition_state(from: State, to: State) -> void:
 		
 		State.ATTACK:
 			animation_player.play("attack")
-			# 使用flower pattern发射8方向子弹
-			var config = shooter.shooter_config(
-				fairy_bullet, 
-				global_position, 
-				Vector2.RIGHT
-				).with_speed(BULLET_SPEED).with_scale(Vector2(0.6, 0.6)).with_ways(8+randi_range(0, 2)).with_custom_config(
-					func(bullet): 
-						#bullet.life = 1.5
-						bullet.hitbox.set_collision_mask_value(8, false)
-						bullet.hitbox.set_collision_mask_value(7, true)
-						#bullet.allocate_tex.call(load("res://fairy1.png"))
-						bullet.scale *= 0.4
-						)
-			
-			print(shooter.shoot(config, Shooter.SHOOT_PATTERN.FLOWER))
-			await get_tree().create_timer(0.2).timeout
-			print(shooter.shoot(config.with_rotation(randf_range(0, PI/3.)), Shooter.SHOOT_PATTERN.FLOWER))
-			attack_timer.wait_time = randf_range(2.0, 4.0)
+			attack_pattern.pick_random().call()
 		
 		State.HURT:
 			animation_player.play("hit")
@@ -206,6 +193,7 @@ func transition_state(from: State, to: State) -> void:
 			for dmg in pending_damages:
 				total_damage += dmg.amount
 				knockback_dir += dmg.source.global_position.direction_to(global_position)
+			print(total_damage, knockback_dir)
 			
 			# stats.health -= int(total_damage)
 			# velocity = knockback_dir.normalized() * KNOCKBACK_AMOUNT
@@ -252,6 +240,45 @@ func move(speed: float, delta: float) -> void:
 		
 		
 # 	pass
+
+func attack_pattern_1() -> void:
+	shoot_pattern = Shooter.SHOOT_PATTERN.FLOWER
+	# 使用flower pattern发射8方向子弹
+	var config = shooter.shooter_config(
+		fairy_bullet, 
+		global_position, 
+		Vector2.RIGHT
+		).with_speed(BULLET_SPEED).with_scale(Vector2(0.6, 0.6)).with_ways(8+randi_range(0, 2)).with_custom_config(
+			func(bullet): 
+				#bullet.life = 1.5
+				bullet.hitbox.set_collision_mask_value(8, false)
+				bullet.hitbox.set_collision_mask_value(7, true)
+				#bullet.allocate_tex.call(load("res://fairy1.png"))
+				bullet.scale *= 0.4
+				)
+	
+	print(shooter.shoot(config, shoot_pattern))
+	await get_tree().create_timer(0.35).timeout
+	print(shooter.shoot(config.with_rotation(randf_range(0, PI/3.)), shoot_pattern))
+	attack_timer.wait_time = randf_range(2.0, 4.0)
+	pass
+
+func attack_pattern_2() -> void:
+	shoot_pattern = Shooter.SHOOT_PATTERN.RANDOM
+	var config = shooter.shooter_config(
+		fairy_bullet, 
+		global_position, 
+		Vector2.RIGHT
+		).with_speed(BULLET_SPEED).with_scale(Vector2(0.6, 0.6)).with_ways(2+randi_range(0, 2)).with_spread_angle(randf_range(0, PI/3.)).with_custom_config(
+			func(bullet): 
+				bullet.hitbox.set_collision_mask_value(8, false)
+				bullet.hitbox.set_collision_mask_value(7, true)
+				bullet.scale *= 0.4
+				)
+	for i in range(6):
+		shooter.shoot(config, shoot_pattern)
+		await get_tree().create_timer(0.1).timeout
+	pass
 
 func can_see_player() -> bool:
 	var result := false

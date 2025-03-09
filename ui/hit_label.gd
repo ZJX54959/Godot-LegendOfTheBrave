@@ -8,8 +8,10 @@ const THEME = preload("res://assets/theme.tres")
 
 var health_change: int
 var color: Color
+var M_hp: int = 10
+var hp: int
 
-func _init(hp: int):
+func _init(hc: int):
 	# await label.ready
 	# label.text = str(health_change)
 	# if health_change < 0:
@@ -18,11 +20,12 @@ func _init(hp: int):
 	# 	label.modulate.g = health_change/30.0
 	# get_vars(hp)
 	theme = THEME
-	text = str(hp)
-	if hp < 0:
-		modulate = Color(1, 1 - abs(hp)/30.0, 1 - abs(hp)/30.0, 1)
-	else:
-		modulate = Color(1 - abs(hp)/30.0, 1, 1 - abs(hp)/30.0, 1)
+	hp = hc
+	# text = str(hp)
+	# if hp < 0:
+	# 	modulate = Color(1, 1 - abs(hp)/M_hp, 1 - abs(hp)/M_hp, 1)
+	# else:
+	# 	modulate = Color(1 - abs(hp)/M_hp, 1, 1 - abs(hp)/M_hp, 1)
 	pass
 
 # func set_vars():
@@ -41,6 +44,9 @@ func _init(hp: int):
 func set_bias_position(pos: Vector2) -> HitLabel:
 	position = pos + Vector2(randf_range(-10, 10), randf_range(-10, -20))
 	return self
+func with_hp(Mhp: int) -> HitLabel:
+	M_hp = Mhp
+	return self
 
 func initailize() -> void:
 	# global_scale = Vector2(1, 1)
@@ -50,6 +56,11 @@ func initailize() -> void:
 func _ready():
 	# set_vars()
 	initailize()
+	text = str(hp)
+	if hp < 0:
+		modulate = Color(1, 1 - abs(hp)/M_hp, 1 - abs(hp)/M_hp, 1)
+	else:
+		modulate = Color(1 - abs(hp)/M_hp, 1, 1 - abs(hp)/M_hp, 1)
 
 	var tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_ELASTIC)
 	tween.tween_property(self, "scale", Vector2(1.2, 1.2), 0.1)

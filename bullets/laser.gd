@@ -53,6 +53,7 @@ func _ready() -> void:
 	super._ready() # already global_position = init_position
 	initial_position = global_position - owner_node.global_position if owner_node else global_position
 	bodies.position = base_position
+	type = "laser"
 
 
 	# 预初始化对象池
@@ -279,7 +280,12 @@ func set_direction(new_direction: Vector2) -> void:
 	bodies.rotation = direction.angle()
 
 func _on_hitbox_hit(_hurtbox: Variant) -> void:
-	laser_hitbox.damage = Damage.new(damage, from_owner if from_owner else self, damage_interval, knockback_force, knockback_dir)
+	laser_hitbox.damage = Damage.new(damage, 
+								from_owner if from_owner else self, 
+								damage_interval, 
+								knockback_force, 
+								knockback_dir
+								).with_name(type).with_type("range")
 	hitpoint -= 1
 
 func is_outscreen() -> bool:

@@ -18,23 +18,27 @@ var Texs := [
 
 func _ready() -> void:
 	sprite_2d.texture = Texs.pick_random()
-	#while sprite_2d.texture.get_size() > Vector2(16, 16):
-		#sprite_2d.texture *= Vector2(.5, .5)
-	if sprite_2d.texture == RED_ROSE:
-		sprite_2d.scale *= .25
-		sprite_2d.position.y -= sprite_2d.texture.get_size().y / 4.
+	
+	# 统一宽度自动缩放
+	var target_width := 16.0  # 根据需求调整目标宽度
+	var tex_size := sprite_2d.texture.get_size()
+	var scale_factor := target_width / tex_size.x
+	sprite_2d.scale = Vector2(scale_factor, scale_factor)
+	
+	# 底部对齐（设置offset到精灵高度的一半）
+	sprite_2d.offset.y = - tex_size.y * scale_factor / 2
 
 
 func _on_body_entered(body: Node2D) -> void:
 	if body == get_tree().get_first_node_in_group("player") or true:
 		var direction := global_position.direction_to(body.global_position)
-		var skew: int = clamp(direction.x * skewValue, -10., 10.)
+		var skw: int = clamp(direction.x * skewValue, -10., 10.)
 		
 		var tween := create_tween()
 		tween.tween_property(
 			sprite_2d.material,
 			"shader_parameter/skew",
-			skew,
+			skw,
 			bendGrassAnimationSpeed
 		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 		
