@@ -11,7 +11,7 @@ enum State {
 const KNOCKBACK_AMOUNT := 512.0/4
 
 # var pending_damage: Damage
-var pending_damages: Array[Damage] = []
+# var pending_damages: Array[Damage] = []
 
 @onready var wall_checker: RayCast2D = $Graphics/WallChecker
 @onready var player_checker: RayCast2D = $Graphics/PlayerChecker
@@ -132,14 +132,14 @@ func transition_state(from: State, to: State) -> void:
 			
 			# stats.health -= pending_damage.amount
 
-			var total_damage := 0.
+			# var total_damage := 0.
 			# var total_knockback := Vector2.ZERO
-			for dmg in pending_damages:
-				total_damage += dmg.amount
+			# for dmg in pending_damages:
+			# 	total_damage += dmg.amount
 				# var dir = dmg.knockback_dir if not dmg.knockback_dir.is_zero_approx() else \
 					# (global_position - dmg.source.global_position).normalized()
 				# total_knockback += dir * dmg.knockback_force
-				pass
+				# pass
 			
 			# stats.health -= int(total_damage)
 			# velocity = total_knockback * KNOCKBACK_AMOUNT
@@ -156,13 +156,13 @@ func transition_state(from: State, to: State) -> void:
 			hurtbox.monitorable = false
 
 
-func _on_hurtbox_hurt(hitbox: Hitbox, damage: Damage) -> void:#把伤害从一个新函数传进来的话，就能实现自定义伤害了
-	# pending_damage = Damage.new()
-	# pending_damage.amount = 1
-	# pending_damage.source = hitbox.owner#把pending_damage改成数组、或者用算法混合，以实现同帧内多个伤害来源的处理
-	print("damage: ", damage.source.name)
-	if handle_damage(damage):
-		"""
-		不对啊...现在伤害处理的逻辑全移到handle_damage里了，那pending_damages是干嘛的？
-		"""
-		pending_damages.append(damage)
+# func _on_hurtbox_hurt(hitbox: Hitbox, damage: Damage) -> void:#把伤害从一个新函数传进来的话，就能实现自定义伤害了
+# 	# pending_damage = Damage.new()
+# 	# pending_damage.amount = 1
+# 	# pending_damage.source = hitbox.owner#把pending_damage改成数组、或者用算法混合，以实现同帧内多个伤害来源的处理
+# 	print("damage: ", damage.source.name)
+# 	if handle_damage(damage):
+# 		"""
+# 		不对啊...现在伤害处理的逻辑全移到handle_damage里了，那pending_damages是干嘛的？
+# 		"""
+# 		pending_damages.append(damage)

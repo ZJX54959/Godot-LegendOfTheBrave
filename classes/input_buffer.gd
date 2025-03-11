@@ -26,7 +26,7 @@ class InputRecord:
 		duration = 0.0
 
 var _buffer: Array[InputRecord] = []
-const MAX_RECORD_TIME := 0.5  # 延长指令有效时间窗口
+const MAX_RECORD_TIME := 0.25  # 延长指令有效时间窗口
 const KEY_REPEAT_THRESHOLD := 0.05  # 键盘自动重复间隔阈值
 var _held_buttons := {}  # 改为记录{按钮: 按下时间}
 var _last_direction := Vector2.ZERO

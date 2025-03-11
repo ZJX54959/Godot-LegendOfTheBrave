@@ -15,7 +15,7 @@ func _ready() -> void:
 	animation_player.play("Lightning")
 
 func _physics_process(delta: float) -> void:
-	print(hitpoint)
+	# print(hitpoint)
 	pass
 
 func move(_f):

@@ -555,5 +555,3 @@ offset_top = -52.0
 offset_right = 45.0
 offset_bottom = -26.0
 stats = NodePath("../Stats")
-
-[connection signal="hurt" from="Graphics/Hurtbox" to="." method="_on_hurtbox_hurt"]

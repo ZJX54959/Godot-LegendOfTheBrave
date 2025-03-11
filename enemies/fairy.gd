@@ -35,7 +35,7 @@ const CHECKER_DISTANCE := 512.0
 ]
 
 var shoot_pattern := Shooter.SHOOT_PATTERN.FLOWER
-var pending_damages: Array[Damage] = []
+# var pending_damages: Array[Damage] = []
 var last_known_position: Vector2
 var lost_timer: float = 0.0
 var dir: Vector2 = Vector2.RIGHT
@@ -188,12 +188,12 @@ func transition_state(from: State, to: State) -> void:
 			animation_player.play("hit")
 			# hitstop(0)
 			# stats.health -= pending_damage.amount
-			var total_damage := 0.
-			var knockback_dir := Vector2.ZERO
-			for dmg in pending_damages:
-				total_damage += dmg.amount
-				knockback_dir += dmg.source.global_position.direction_to(global_position)
-			print(total_damage, knockback_dir)
+			# var total_damage := 0.
+			# var knockback_dir := Vector2.ZERO
+			# for dmg in pending_damages:
+			# 	total_damage += dmg.amount
+			# 	knockback_dir += dmg.source.global_position.direction_to(global_position)
+			# print(total_damage, knockback_dir)
 			
 			# stats.health -= int(total_damage)
 			# velocity = knockback_dir.normalized() * KNOCKBACK_AMOUNT
@@ -295,11 +295,11 @@ func can_see_player() -> bool:
 	return result
 
 
-func _on_hurtbox_hurt(_hitbox: Variant, damage: Variant) -> void:
-	if handle_damage(damage):
-		# pending_damage = damage
-		# state_machine.transition_to(State.HURT)
-		pending_damages.append(damage)
+# func _on_hurtbox_hurt(_hitbox: Variant, damage: Variant) -> void:
+# 	if handle_damage(damage):
+# 		# pending_damage = damage
+# 		# state_machine.transition_to(State.HURT)
+# 		pending_damages.append(damage)
 
 func _on_hitbox_hit(_hurtbox: Variant) -> void:
 	dir = global_position.direction_to(hurtbox.global_position)

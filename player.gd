@@ -105,6 +105,7 @@ var interacting_with: Array[Interactable]
 @export var b_LASER: PackedScene = preload("res://bullets/laser.tscn")
 @export var b_ARROW: PackedScene = preload("res://bullets/arrow.tscn")
 @export var b_GRAPPLING_HOOK: PackedScene = preload("res://bullets/grapple.tscn")
+@export var b_LIGHTNING: PackedScene = preload("res://bullets/lightning.tscn")
 
 '''
 主要逻辑
@@ -208,8 +209,10 @@ func get_next_state(state: State) -> int:
 	var input := _get_current_input_state()
 	var is_still: bool = Input.get_axis("move_left", "move_right") == 0
 
-	if input.special:
+	if input.dp:
 		return State.ATTACK_3
+	elif input.qcf:
+		return State.ATTACK_COMBO
 	
 	# 地面状态通用检测
 	if state in GROUND_STATES and not is_on_floor():
@@ -276,7 +279,8 @@ func get_next_state(state: State) -> int:
 				return State.ATTACK_2 if state == State.ATTACK_1 else State.ATTACK_3
 		
 		State.ATTACK_COMBO:
-			if not input.attack:
+			if not (Input.is_action_pressed("Attack") or Input.is_action_pressed("Range")):
+				print("ATTACK_COMBO! ")
 				return State.IDLE
 
 		State.HURT:
@@ -352,7 +356,7 @@ func transition_state(from: State, to: State) -> void:
 			#shooter.shoot(shooter.PARTTERN.BULLET, Bullet.BASIC_TYPE.SLASH, 1, Vector2(graphics.scale.x, 0), 0, 1, 1, 1, position+Vector2(graphics.scale.x*16, -18), false, null, Vector2(1, 0.2))
 			is_combo_requested = false
 			attack_request_timer.stop()
-			hitbox.damage = Damage.new(3, self, 10)
+			hitbox.damage = Damage.new(3, self, 10).with_type("slash")
 			
 		
 		State.ATTACK_2:
@@ -360,7 +364,7 @@ func transition_state(from: State, to: State) -> void:
 			#shooter.shoot(shooter.PARTTERN.BULLET, Bullet.BASIC_TYPE.SLASH, 1, Vector2(graphics.scale.x, 0), 0, 1, 1, 1, position+Vector2(graphics.scale.x*20, -18), false, null, Vector2(2, 0.4))
 			is_combo_requested = false
 			attack_request_timer.stop()
-			hitbox.damage = Damage.new(3, self, 10)
+			hitbox.damage = Damage.new(3, self, 10).with_type("slash")
 		
 		State.ATTACK_3:
 			animation_player.play("attack_3")
@@ -368,12 +372,13 @@ func transition_state(from: State, to: State) -> void:
 			is_combo_requested = false
 			attack_request_timer.stop()
 			position.x += direction * 5
-			hitbox.damage = Damage.new(30, self, 10, 25, Vector2(0, -1) * direction).with_name("DP_attack! ")
+			hitbox.damage = Damage.new(30, self, 10, 25, Vector2(0, -1)).with_name("DP_attack! ").smash().with_type("slash")
 		
 		State.ATTACK_COMBO:
 			animation_player.play("attack_combo")
 			#shooter.shoot(shooter.PARTTERN.BULLET, Bullet.BASIC_TYPE.SLASH, 1, Vector2(graphics.scale.x, graphics.scale.x), 0, 1, 1, 1, position+Vector2(graphics.scale.x*24, -18), false, null, Vector2(2, 0.4))
 			is_combo_requested = false
+			hitbox.damage = Damage.new(3, self, 6, 60, Vector2(direction, 0)).smash().with_type("slash")
 			attack_request_timer.stop()
 		
 		State.HURT:
@@ -444,8 +449,10 @@ func _get_current_input_state() -> Dictionary:
 		"attack": _check_attack_input(),
 		"slide": _check_slide_command(),
 		"range_attack": _check_range_attack_input(),
-		"special": _check_dp_command(),
+		"dp": _check_dp_command(),
+		"dm": _check_dm_command(),
 		"hook": _check_hook_input(),
+		"qcf": _check_qcf_command(),
 	}
 	# print("state: ", state)
 	# var text := ""
@@ -557,6 +564,26 @@ func _check_dp_command() -> bool:
 		{"button": "Range", "min_duration": 0.01}
 	])# and Input.is_action_just_pressed("Attack")
 
+func _check_qcf_command() -> bool:
+	return input_buffer.check_command([
+		Vector2.DOWN,
+		Vector2(direction, 0) + Vector2.DOWN,
+		Vector2(direction, 0),
+		{"button": "Range", "min_duration": 0.01}
+	])# and Input.is_action_just_pressed("Attack")
+
+func _check_dm_command() -> bool:
+	var dm_input = input_buffer.check_command([
+		Vector2.DOWN,
+		Vector2.DOWN,
+		{"button": "Magic", "min_duration": 0.01}
+	])
+	# if Input.is_action_just_pressed("Magic"):
+	# 	print("Magic!")
+	if dm_input:
+		_fire_charge_shot2()
+	return dm_input
+
 func _check_slide_command() -> bool:
 	return input_buffer.check_command([
 		Vector2(direction, 0) + Vector2.DOWN,
@@ -598,6 +625,13 @@ func _fire_grapple():
 	if g:
 		add_grapple(g)
 		print(active_grapples)
+
+func _fire_charge_shot2():
+	print(shooter.shoot(
+		shooter.shooter_config(b_LIGHTNING, get_global_mouse_position()),
+		Shooter.SHOOT_PATTERN.SINGLE
+	))
+	print("fire_charge_shot2")
 
 func add_grapple(grapple: Bullet):
 	active_grapples.append(grapple)

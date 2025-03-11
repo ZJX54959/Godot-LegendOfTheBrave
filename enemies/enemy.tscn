@@ -35,3 +35,5 @@ script = ExtResource("1_js5bg")
 
 [node name="Stats" type="Node" parent="."]
 script = ExtResource("5_0ua60")
+
+[connection signal="hurt" from="Graphics/Hurtbox" to="." method="_on_hurtbox_hurt"]

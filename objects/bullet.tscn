@@ -1,7 +1,7 @@
 [gd_scene load_steps=15 format=3 uid="uid://cev6awq0xpyr5"]
 
-[ext_resource type="Script" path="res://classes/bullet.gd" id="1_pmo7o"]
-[ext_resource type="Script" path="res://classes/Hitbox.gd" id="2_60sc0"]
+[ext_resource type="Script" uid="uid://dbxkb7kkjcgtt" path="res://classes/bullet.gd" id="1_pmo7o"]
+[ext_resource type="Script" uid="uid://ps3sd84fqsi" path="res://classes/Hitbox.gd" id="2_60sc0"]
 [ext_resource type="Texture2D" uid="uid://baeexb25ro87x" path="res://assets/Lightning.png" id="3_i7crg"]
 [ext_resource type="Texture2D" uid="uid://cxllnjdwm3qgg" path="res://assets/Tentacle1.png" id="4_x2xve"]
 [ext_resource type="Texture2D" uid="uid://dh2e4g3a25ccr" path="res://assets/Slash.png" id="5_5yomh"]
@@ -312,10 +312,10 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5j7h5"]
 _data = {
-"Lightning": SubResource("Animation_w74k5"),
-"RESET": SubResource("Animation_6xmyd"),
-"Tentacle1": SubResource("Animation_6ipbj"),
-"slash": SubResource("Animation_2k6dk")
+&"Lightning": SubResource("Animation_w74k5"),
+&"RESET": SubResource("Animation_6xmyd"),
+&"Tentacle1": SubResource("Animation_6ipbj"),
+&"slash": SubResource("Animation_2k6dk")
 }
 
 [node name="Bullet" type="Node2D"]
@@ -328,10 +328,10 @@ texture = SubResource("GradientTexture2D_aeryx")
 
 [node name="Particles" type="GPUParticles2D" parent="."]
 emitting = false
-process_material = SubResource("ParticleProcessMaterial_nfoy5")
 one_shot = true
 explosiveness = 0.14
 randomness = 0.2
+process_material = SubResource("ParticleProcessMaterial_nfoy5")
 
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 8
@@ -344,7 +344,7 @@ disabled = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_5j7h5")
+&"": SubResource("AnimationLibrary_5j7h5")
 }
 
 [node name="InvincibleTimer" type="Timer" parent="."]
